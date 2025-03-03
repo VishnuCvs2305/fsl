@@ -98,100 +98,100 @@
     </lightning-card>
   </template>
 
-  <template if:true={showCPTModal}>
-    <section role="dialog" class="slds-modal slds-fade-in-open">
-        <div class="slds-modal__container">
-            <header class="slds-modal__header slds-theme_alert-texture slds-theme_shade">
-                <h2 class="slds-text-heading_medium">Saisie d’une relève</h2>
-            </header>
-            <div class="slds-modal__content slds-p-around_medium">
-                <p><strong>Nom du Compteur:</strong> {selectedAsset.fields.Name.value}</p>
-                <p><strong>Unité:</strong> {selectedAsset.fields.FSL_Unit__c.value}</p>
-                <p><strong>Dernier Index:</strong> {lastMeterReading.FSL_Index__c}</p>
-
-                <lightning-input
-                    label="Index"
-                    type="number"
-                    value={editableIndex}
-                    data-field="Index"
-                    onchange={handleChanges}>
-                </lightning-input>
-
-                <lightning-combobox
-                    label="Statut"
-                    value={editableStatus}
-                    data-field="Statut"
-                    options={statusOptions}
-                    onchange={handleChanges}>
-                </lightning-combobox>
-
-                <lightning-textarea
-                    label="Commentaire"
-                    value={editableComment}
-                    data-field="Commentaire"
-                    onchange={handleChanges}>
-                </lightning-textarea>
-            </div>
-            <footer class="slds-modal__footer">
-                <button class="slds-button slds-button_neutral" onclick={closeCPTModal}>Précédent</button>
-                <button class="slds-button slds-button_brand" onclick={saveMeterReading}>Valider</button>
-            </footer>
-        </div>
-    </section>
-    <div class="slds-backdrop slds-backdrop_open"></div>
-</template>
-
-
-<template if:true={showSTKModal}>
+ <!-- CPT Modal -->
+<template if:true={showCPTModal}>
   <section role="dialog" class="slds-modal slds-fade-in-open">
       <div class="slds-modal__container">
           <header class="slds-modal__header slds-theme_alert-texture slds-theme_shade">
               <h2 class="slds-text-heading_medium">Saisie d’une relève</h2>
           </header>
           <div class="slds-modal__content slds-p-around_medium">
-              <p><strong>Nom du Compteur:</strong> {selectedAsset.fields.Name.value}</p>
-              <p><strong>Unité:</strong> {selectedAsset.fields.FSL_Unit__c.value}</p>
-              <p><strong>Dernière Valeur du Réservoir:</strong> {lastMeterReading.FSL_TankValue__c}</p>
+                <!--<p><strong>Nom du Compteur:</strong> {selectedAsset.fields.Name.value}</p>
+            <p><strong>Unité:</strong> {selectedAsset.fields.FSL_Unit__c.value}</p> -->
 
-              <lightning-input
-                  label="Valeur du Réservoir"
-                  type="number"
-                  value={editableTankValue}
-                  data-field="TankValue"
-                  onchange={handleChanges}>
-              </lightning-input>
 
-              <lightning-input
-                  label="Livraison"
-                  type="number"
-                  value={editableDelivery}
-                  data-field="Delivery"
-                  onchange={handleChanges}>
-              </lightning-input>
+              <!-- If meter reading record exists, show in View mode -->
+              <template if:true={existingMeterReadingId}>
+                  <lightning-record-form
+                      record-id={existingMeterReadingId}
+                      object-api-name="FSL_EnergyMeterReading__c"
+                      fields={cptFields}
+                      mode="view">
+                  </lightning-record-form>
+              </template>
 
-              <lightning-combobox
-                  label="Statut"
-                  value={editableStatus}
-                  data-field="Statut"
-                  options={statusOptions}
-                  onchange={handleChanges}>
-              </lightning-combobox>
+              <!-- If no meter reading, show in Edit mode -->
+              <template if:false={existingMeterReadingId}>
+                  <lightning-record-edit-form 
+                      object-api-name="FSL_EnergyMeterReading__c"
+                      onsubmit={handleSubmit}
+                      onsuccess={handleSuccess}>
 
-              <lightning-textarea
-                  label="Commentaire"
-                  value={editableComment}
-                  data-field="Commentaire"
-                  onchange={handleChanges}>
-              </lightning-textarea>
+                      <lightning-messages></lightning-messages>
+
+                      <lightning-input-field field-name="FSL_Index__c"></lightning-input-field>
+                      <lightning-input-field field-name="FSL_Status__c"></lightning-input-field>
+                      <lightning-input-field field-name="FSL_Comment__c"></lightning-input-field>
+
+                      <div class="slds-m-top_medium">
+                          <lightning-button label="Annuler" onclick={closeCPTModal}></lightning-button>
+                          <lightning-button type="submit" label="Valider" variant="brand"></lightning-button>
+                      </div>
+
+                  </lightning-record-edit-form>
+              </template>
           </div>
-          <footer class="slds-modal__footer">
-              <button class="slds-button slds-button_neutral" onclick={closeSTKModal}>Précédent</button>
-              <button class="slds-button slds-button_brand" onclick={saveStockReading}>Valider</button>
-          </footer>
       </div>
   </section>
-  <div class="slds-backdrop slds-backdrop_open"></div>
 </template>
+
+<!-- SKT Modal -->
+<template if:true={showSTKModal}>
+  <section role="dialog" class="slds-modal slds-fade-in-open">
+      <div class="slds-modal__container">
+          <header class="slds-modal__header slds-theme_alert-texture slds-theme_shade">
+              <h2 class="slds-text-heading_medium">Saisie d’un stock</h2>
+          </header>
+          <div class="slds-modal__content slds-p-around_medium">
+          <!---  <p><strong>Nom du Compteur:</strong> {selectedAsset.fields.Name.value}</p>
+            <p><strong>Unité:</strong> {selectedAsset.fields.FSL_Unit__c.value}</p> -->
+
+              <!-- If stock reading exists, show in View mode -->
+              <template if:true={existingStockReadingId}>
+                  <lightning-record-form
+                      record-id={existingStockReadingId}
+                      object-api-name="FSL_EnergyMeterReading__c"
+                      fields={sktFields}
+                      mode="view">
+                  </lightning-record-form>
+              </template>
+
+              <!-- If no stock reading, show in Edit mode -->
+              <template if:false={existingStockReadingId}>
+                  <lightning-record-edit-form 
+                      object-api-name="FSL_EnergyMeterReading__c"
+                      onsubmit={handleSubmit}
+                      onsuccess={handleSuccess}>
+
+                      <lightning-messages></lightning-messages>
+
+                      <lightning-input-field field-name="FSL_TankValue__c"></lightning-input-field>
+                      <lightning-input-field field-name="FSL_Delivery__c"></lightning-input-field>
+                      <lightning-input-field field-name="FSL_Status__c"></lightning-input-field>
+                      <lightning-input-field field-name="FSL_Comment__c"></lightning-input-field>
+
+                      <div class="slds-m-top_medium">
+                          <lightning-button label="Annuler" onclick={closeSTKModal}></lightning-button>
+                          <lightning-button type="submit" label="Valider" variant="brand"></lightning-button>
+                      </div>
+
+                  </lightning-record-edit-form>
+              </template>
+          </div>
+      </div>
+  </section>
+</template>
+
 
 
 

@@ -134,9 +134,11 @@ export default class FSL_EnergyPropertyMeterReading_lwc extends LightningElement
     @track assetError;
     @track showCPTModal = false; 
     @track showSTKModal = false;
-    @track showCPTModal = false;
-    @track showSTKModal = false;
     @track selectedEquipmentType = '';
+    @track assetMeterReadingsMap = new Map();
+    @track existingMeterReadingId = null;
+    @track existingStockReadingId = null;
+    @track selectedAsset;
 
 
 
@@ -316,6 +318,37 @@ export default class FSL_EnergyPropertyMeterReading_lwc extends LightningElement
         }
     }
     
+    @wire(getRelatedListRecords, {
+        parentRecordId: '$assetRecords',
+        relatedListId: 'FSL_EnergyMeterReading__r',
+        fields: ['FSL_EnergyMeterReading__c.Id', 'FSL_EnergyMeterReading__c.FSL_Index__c', 
+                 'FSL_EnergyMeterReading__c.FSL_Status__c', 'FSL_EnergyMeterReading__c.FSL_Comment__c', 
+                 'FSL_EnergyMeterReading__c.FSL_Asset__c'],
+        sortBy: ['CreatedDate DESC']
+    })
+    wiredMeterReadings({ error, data }) {
+        if (data) {
+            this.assetMeterReadingsMap.clear();  // Reset map before updating
+    
+            data.records.forEach(reading => {
+                const assetId = reading.fields.FSL_Asset__c.value;
+    
+                if (!this.assetMeterReadingsMap.has(assetId)) {
+                    this.assetMeterReadingsMap.set(assetId, []);
+                }
+                this.assetMeterReadingsMap.get(assetId).push(reading);
+            });
+    
+            console.log("Meter Readings Map: ", this.assetMeterReadingsMap);
+        } else if (error) {
+            console.error("Error fetching meter readings: ", error);
+        }
+    }
+
+    // Define fields for record forms
+    cptFields = ["FSL_Index__c", "FSL_Status__c", "FSL_Comment__c"];
+    sktFields = ["FSL_TankValue__c", "FSL_Delivery__c", "FSL_Status__c", "FSL_Comment__c"];
+
     handleSaisieIndex(event) {
         console.log('handleSaisieIndex');
         console.log('Asset ID - ' + event.target.dataset.id);
@@ -346,29 +379,14 @@ export default class FSL_EnergyPropertyMeterReading_lwc extends LightningElement
         this.showCPTModal = true;
         console.log('handleCPTModal');
         console.log('Assert' + asset);
-        // Fetch last recorded index value for the asset
-        fetch(`/services/data/vXX.X/query/?q=SELECT Id, FSL_Index__c, FSL_Status__c, FSL_Comment__c FROM FSL_EnergyMeterReading__c WHERE FSL_Asset__c = '${asset}' ORDER BY CreatedDate DESC LIMIT 1`, {
-            method: "GET",
-            headers: { "Authorization": "Bearer " + this.sessionId }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.records.length > 0) {
-                let record = data.records[0];
-                this.lastIndex = record.FSL_Index__c;
-                this.editableIndex = record.FSL_Index__c;
-                this.editableStatus = record.FSL_Status__c;
-                this.editableComment = record.FSL_Comment__c;
-                this.existingRecordId = record.Id;
-            } else {
-                this.lastIndex = null;
-                this.editableIndex = null;
-                this.editableStatus = null;
-                this.editableComment = null;
-                this.existingRecordId = null;
-            }
-        })
-        .catch(error => console.error("Error fetching CPT data:", error));
+        
+        if (this.assetMeterReadingsMap.has(asset) && this.assetMeterReadingsMap.get(asset).length > 0) {
+            this.existingMeterReadingId = this.assetMeterReadingsMap.get(asset)[0].Id;
+        } else {
+            this.existingMeterReadingId = null;
+            console.error('No meter readings found for the asset:', asset);
+        } 
+    
     }
     
     // Handle STK (Stock Reading) Modal
@@ -376,40 +394,23 @@ export default class FSL_EnergyPropertyMeterReading_lwc extends LightningElement
         this.showSTKModal = true;
         console.log('handleSTKModal');
         console.log('Assert' + asset);
-        // Fetch last recorded tank value for the asset
-        fetch(`/services/data/vXX.X/query/?q=SELECT Id, FSL_TankValue__c, FSL_Delivery__c, FSL_Status__c, FSL_Comment__c FROM FSL_EnergyMeterReading__c WHERE FSL_Asset__c = '${asset}' ORDER BY CreatedDate DESC LIMIT 1`, {
-            method: "GET",
-            headers: { "Authorization": "Bearer " + this.sessionId }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.records.length > 0) {
-                let record = data.records[0];
-                this.lastTankValue = record.FSL_TankValue__c;
-                this.editableTankValue = record.FSL_TankValue__c;
-                this.editableDelivery = record.FSL_Delivery__c;
-                this.editableStatus = record.FSL_Status__c;
-                this.editableComment = record.FSL_Comment__c;
-                this.existingRecordId = record.Id;
-            } else {
-                this.lastTankValue = null;
-                this.editableTankValue = null;
-                this.editableDelivery = null;
-                this.editableStatus = null;
-                this.editableComment = null;
-                this.existingRecordId = null;
-            }
-        })
-        .catch(error => console.error("Error fetching STK data:", error));
+        if (this.assetMeterReadingsMap.has(asset) && this.assetMeterReadingsMap.get(asset).length > 0) {
+            this.existingMeterReadingId = this.assetMeterReadingsMap.get(asset)[0].Id;
+        } else {
+            this.existingStockReadingId = null;
+            console.error('No meter readings found for the asset:', asset);
+        }
     }
     closeCPTModal() {
         this.showCPTModal = false;
         this.selectedEquipmentType = '';
+        this.existingMeterReadingId = '';
     }
 
     closeSTKModal() {
         this.showSTKModal = false;
         this.selectedEquipmentType = '';
+        this.existingStockReadingId = '';
     }
 
     async saveMeterReading() {
