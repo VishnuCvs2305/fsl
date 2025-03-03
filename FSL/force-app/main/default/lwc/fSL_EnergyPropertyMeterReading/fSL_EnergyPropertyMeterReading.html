@@ -1,0 +1,198 @@
+<template>
+  <!--div class="slds-m-top_medium slds-m-bottom_x-large">
+        <h2 class="slds-text-heading_medium slds-m-bottom_medium">
+            Tree Grid component with data from a static source. Click on the arrow icons to expand or collapse a branch.
+        </h2>
+
+        <div class="slds-p-around_medium lgc-bg">
+            <lightning-tree-grid
+                columns={gridColumns}
+                data={gridData}
+                key-field="name"
+            ></lightning-tree-grid>
+        </div>
+    </div-->
+
+
+  <template if:true={currentEnergyPropertyReadingId}>
+    <lightning-card title="Update Energy Property Reading">
+      <lightning-record-form object-api-name={eprObject} record-id={currentEnergyPropertyReadingId}
+        fields={currentEPREditFields}></lightning-record-form>
+    </lightning-card>
+  </template>
+  <template if:false={currentEnergyPropertyReadingId}>
+    <lightning-card title="Create Energy Property Reading">
+      <!--lightning-record-form object-api-name={eprObject} fields={currentEPRCreateFields} onsubmit={handleSubmit} onsuccess={handleSuccess}></lightning-record-form-->
+
+      <lightning-record-edit-form object-api-name={eprObject} onsubmit={handleSubmit} onsuccess={handleSuccess}>
+        <lightning-input-field field-name={heatingPeriodField}> </lightning-input-field>
+        <lightning-input-field field-name={stateField} value={stateDefaultValue}> </lightning-input-field>
+        <lightning-input-field field-name={energyReadingDateTimeField} value={energyReadingDateTimeFieldValue}>
+        </lightning-input-field>
+        <!--lightning-input-field field-name={workOrderField} value={woId}> </lightning-input-field-->
+        <!--lightning-input-field field-name={locationField} value={locationId}> </lightning-input-field-->
+        <lightning-button class="slds-m-top_small" variant="brand" type="submit" label="Save"></lightning-button>
+      </lightning-record-edit-form>
+
+    </lightning-card>
+  </template>
+  <template if:true={previousEnergyPropertyReadingId}>
+    <lightning-card title="Previous Energy Property Reading">
+      <lightning-record-form object-api-name={eprObject} record-id={previousEnergyPropertyReadingId}
+        fields={previousEPRReadFields} mode="readonly"></lightning-record-form>
+    </lightning-card>
+  </template>
+  <template if:true={assetRecords}>
+    <lightning-card class="slds-p-around_medium">
+      <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered" aria-label="Assets">
+        <thead>
+          <tr class="slds-line-height_reset">
+            <th class="" scope="col">
+              <div class="slds-truncate" title="Inst. Géo./Zone">Inst. Géo./Zone</div>
+            </th>
+            <th class="" scope="col">
+              <div class="slds-truncate" title="Compteur">Compteur</div>
+            </th>
+            <th class="" scope="col">
+              <div class="slds-truncate" title="P1 ?">P1 ?</div>
+            </th>
+            <th class="" scope="col">
+              <div class="slds-truncate" title="Saisie index">Saisie index</div>
+            </th>
+            <th class="" scope="col">
+              <div class="slds-truncate" title="Remplacement">Remplacement</div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <template for:each={assetRecords} for:item="rec">
+            <tr key={rec.fields.Id.value} class="slds-hint-parent">
+              <td data-label="Installation Géographique ou Zone">
+                <div class="slds-truncate" title={rec.fields.Location.value.fields.Name.value}>
+                  {rec.fields.Location.value.fields.Name.value}
+                </div>
+              </td>
+              <td data-label="Nom du compteur">
+                <div class="slds-truncate" title={rec.fields.Name.value}>{rec.fields.Name.value}</div>
+              </td>
+              <td data-label="P1 ?">
+                <template if:true={rec.fields.FSL_P1__c.value}>
+                  <div class="slds-truncate" title={rec.fields.FSL_P1__c.value}><lightning-input type="checkbox" label="" checked value="P1" read-only disabled></lightning-input></div>
+                </template>
+                <template if:false={rec.fields.FSL_P1__c.value}>
+                  <div class="slds-truncate" title={rec.fields.FSL_P1__c.value}><lightning-input type="checkbox" label="" value="P1" read-only disabled></lightning-input></div>
+                </template>                
+              </td>
+              <td data-label="Saisie index">
+                <button class="slds-button slds-button_brand" onclick={handleSaisieIndex} data-id={rec.fields.Id.value}>Saisie index</button>
+              </td>
+              <td data-label="Remplacement">
+                <button class="slds-button slds-button_text-destructive">Remplacement</button>
+              </td>
+            </tr>
+          </template>
+        </tbody>
+      </table>
+
+
+    </lightning-card>
+  </template>
+
+  <template if:true={showCPTModal}>
+    <section role="dialog" class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container">
+            <header class="slds-modal__header slds-theme_alert-texture slds-theme_shade">
+                <h2 class="slds-text-heading_medium">Saisie d’une relève</h2>
+            </header>
+            <div class="slds-modal__content slds-p-around_medium">
+                <p><strong>Nom du Compteur:</strong> {selectedAsset.fields.Name.value}</p>
+                <p><strong>Unité:</strong> {selectedAsset.fields.FSL_Unit__c.value}</p>
+                <p><strong>Dernier Index:</strong> {lastMeterReading.FSL_Index__c}</p>
+
+                <lightning-input
+                    label="Index"
+                    type="number"
+                    value={editableIndex}
+                    data-field="Index"
+                    onchange={handleChanges}>
+                </lightning-input>
+
+                <lightning-combobox
+                    label="Statut"
+                    value={editableStatus}
+                    data-field="Statut"
+                    options={statusOptions}
+                    onchange={handleChanges}>
+                </lightning-combobox>
+
+                <lightning-textarea
+                    label="Commentaire"
+                    value={editableComment}
+                    data-field="Commentaire"
+                    onchange={handleChanges}>
+                </lightning-textarea>
+            </div>
+            <footer class="slds-modal__footer">
+                <button class="slds-button slds-button_neutral" onclick={closeCPTModal}>Précédent</button>
+                <button class="slds-button slds-button_brand" onclick={saveMeterReading}>Valider</button>
+            </footer>
+        </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+</template>
+
+
+<template if:true={showSTKModal}>
+  <section role="dialog" class="slds-modal slds-fade-in-open">
+      <div class="slds-modal__container">
+          <header class="slds-modal__header slds-theme_alert-texture slds-theme_shade">
+              <h2 class="slds-text-heading_medium">Saisie d’une relève</h2>
+          </header>
+          <div class="slds-modal__content slds-p-around_medium">
+              <p><strong>Nom du Compteur:</strong> {selectedAsset.fields.Name.value}</p>
+              <p><strong>Unité:</strong> {selectedAsset.fields.FSL_Unit__c.value}</p>
+              <p><strong>Dernière Valeur du Réservoir:</strong> {lastMeterReading.FSL_TankValue__c}</p>
+
+              <lightning-input
+                  label="Valeur du Réservoir"
+                  type="number"
+                  value={editableTankValue}
+                  data-field="TankValue"
+                  onchange={handleChanges}>
+              </lightning-input>
+
+              <lightning-input
+                  label="Livraison"
+                  type="number"
+                  value={editableDelivery}
+                  data-field="Delivery"
+                  onchange={handleChanges}>
+              </lightning-input>
+
+              <lightning-combobox
+                  label="Statut"
+                  value={editableStatus}
+                  data-field="Statut"
+                  options={statusOptions}
+                  onchange={handleChanges}>
+              </lightning-combobox>
+
+              <lightning-textarea
+                  label="Commentaire"
+                  value={editableComment}
+                  data-field="Commentaire"
+                  onchange={handleChanges}>
+              </lightning-textarea>
+          </div>
+          <footer class="slds-modal__footer">
+              <button class="slds-button slds-button_neutral" onclick={closeSTKModal}>Précédent</button>
+              <button class="slds-button slds-button_brand" onclick={saveStockReading}>Valider</button>
+          </footer>
+      </div>
+  </section>
+  <div class="slds-backdrop slds-backdrop_open"></div>
+</template>
+
+
+
+</template>
