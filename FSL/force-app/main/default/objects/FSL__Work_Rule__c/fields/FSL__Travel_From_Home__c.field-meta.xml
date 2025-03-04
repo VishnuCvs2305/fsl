@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>FSL__Travel_From_Home__c</fullName>
+    <deprecated>false</deprecated>
+    <externalId>false</externalId>
+    <inlineHelpText>Determine the number of minutes that the service resource has available for travel before the start of the work day. This time is at the resource&apos;s expense and isn&apos;t accounted for. When using Enhanced Scheduling and Optimization, if this field is empty, all travel will be scheduled within the work day. When not using Enhanced Scheduling and Optimization, if this field is empty, any amount of travel before the start of the work day is valid.</inlineHelpText>
+    <label>Travel From Home (minutes)</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

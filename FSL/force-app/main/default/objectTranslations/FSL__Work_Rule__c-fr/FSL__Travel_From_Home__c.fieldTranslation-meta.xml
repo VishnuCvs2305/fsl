@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <help>Définissez le temps de trajet en minutes dont dispose la ressource de service avant le début de la journée de travail. Ce temps est aux frais de la ressource et n’est pas pris en compte. Quand ce champ est vide, tout le trajet est planifié pendant la journée de travail si Planification et optimisation avancées est utilisée, sinon n’importe quel temps de trajet avant le début de la journée de travail est valide.</help>
+    <label><!-- Travel From Home (minutes) --></label>
+    <name>FSL__Travel_From_Home__c</name>
+</CustomFieldTranslation>

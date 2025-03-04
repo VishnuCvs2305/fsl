@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <help>Determine los minutos que el recurso de servicio tiene para desplazarse antes del inicio de la jornada laboral. Este tiempo es a expensas del recurso y no se tiene en cuenta. Cuando utilice Optimización y programación mejoradas, si este campo está vacío, todos los desplazamientos se programarán dentro de la jornada laboral. Si no se utiliza y está vacío, será válida cualquier cantidad de desplazamiento antes del inicio de la jornada.</help>
+    <label><!-- Travel From Home (minutes) --></label>
+    <name>FSL__Travel_From_Home__c</name>
+</CustomFieldTranslation>

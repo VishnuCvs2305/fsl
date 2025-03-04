@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <help>Số phút di chuyển của NS trước khi vào giờ làm, không tính vào chi phí. Nếu dùng t.năng Lập KH và Tối Ưu Hóa NC rồi để trống trường thì t.gian sẽ được lập KH trong ngày. Nếu không dùng t.năng mà để trống trường, t.gian di chuyển trước giờ làm sẽ hợp lệ.</help>
+    <label><!-- Travel From Home (minutes) --></label>
+    <name>FSL__Travel_From_Home__c</name>
+</CustomFieldTranslation>

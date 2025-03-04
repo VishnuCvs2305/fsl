@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <help>終業時間後の移動にサービスリソースが使用できる時間 (分) を決定します。この時間はリソースの勤務時間に含まれません。高度なスケジュール設定および最適化を使用している場合、この項目が空であると、すべての移動が作業日内にスケジュールされます。高度なスケジュール設定および最適化を使用していない場合、この項目が空であると、終業時間後のすべての移動時間が有効になります。</help>
+    <label><!-- Travel To Home (minutes) --></label>
+    <name>FSL__Travel_To_Home__c</name>
+</CustomFieldTranslation>

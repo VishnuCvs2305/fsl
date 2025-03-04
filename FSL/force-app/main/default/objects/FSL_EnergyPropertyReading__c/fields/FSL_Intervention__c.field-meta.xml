@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>FSL_Intervention__c</fullName>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <description>MB-3875</description>
+    <label>Intervention</label>
+    <referenceTo>WorkOrder</referenceTo>
+    <relationshipLabel>Energy Property Readings</relationshipLabel>
+    <relationshipName>Energy_Property_Readings</relationshipName>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

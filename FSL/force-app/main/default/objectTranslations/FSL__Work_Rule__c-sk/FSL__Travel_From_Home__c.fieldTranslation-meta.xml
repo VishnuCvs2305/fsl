@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <help>Určite počet minút, ktoré má servisný zdroj k dispozícii na cestu pred začiatkom pracovného dňa. Tento čas je na náklady zdroja a nezapočítava sa. Ak je pri použití rozšíreného plánovania a optimalizácie toto pole prázdne, všetky cesty sa naplánujú v rámci pracovného dňa. Ak sa nepoužíva rozšírené plánovanie a optimalizácia, ak je toto pole prázdne, platí akékoľvek množstvo ciest pred začiatkom pracovného dňa.</help>
+    <label><!-- Travel From Home (minutes) --></label>
+    <name>FSL__Travel_From_Home__c</name>
+</CustomFieldTranslation>

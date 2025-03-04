@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>FSL_APE__c</fullName>
+    <label>APE</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackTrending>false</trackTrending>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Value1</fullName>
+                <default>false</default>
+                <label>Value1</label>
+            </value>
+            <value>
+                <fullName>Demand Regulation - Water Law / TNC Adjustment</fullName>
+                <default>false</default>
+                <label>Demand Regulation - Water Law / TNC Adjustment</label>
+            </value>
+            <value>
+                <fullName>Demand Regulation - Optimization Adjustment</fullName>
+                <default>false</default>
+                <label>Demand Regulation - Optimization Adjustment</label>
+            </value>
+            <value>
+                <fullName>Demand Regulation - Intermittency Adjustment</fullName>
+                <default>false</default>
+                <label>Demand Regulation - Intermittency Adjustment</label>
+            </value>
+            <value>
+                <fullName>Demand Regulation - Sensor Probe Verification</fullName>
+                <default>false</default>
+                <label>Demand Regulation - Sensor Probe Verification</label>
+            </value>
+            <value>
+                <fullName>DHW - Heat Exchanger Cleaning</fullName>
+                <default>false</default>
+                <label>DHW - Heat Exchanger Cleaning</label>
+            </value>
+            <value>
+                <fullName>DHW - Solar Equipment Cleaning</fullName>
+                <default>false</default>
+                <label>DHW - Solar Equipment Cleaning</label>
+            </value>
+            <value>
+                <fullName>DHW - DHW Setpoint Adjustment</fullName>
+                <default>false</default>
+                <label>DHW - DHW Setpoint Adjustment</label>
+            </value>
+            <value>
+                <fullName>Metering and Readings - DHW Metering Verification</fullName>
+                <default>false</default>
+                <label>Metering and Readings - DHW Metering Verification</label>
+            </value>
+            <value>
+                <fullName>Metering and Readings - Energy Metering Verification</fullName>
+                <default>false</default>
+                <label>Metering and Readings - Energy Metering Verification</label>
+            </value>
+            <value>
+                <fullName>Metering and Readings - Fuel Metering Verification (Gas Pressure)</fullName>
+                <default>false</default>
+                <label>Metering and Readings - Fuel Metering Verification (Gas Pressure)</label>
+            </value>
+            <value>
+                <fullName>Metering and Readings - Remote Reading Reliability Verification</fullName>
+                <default>false</default>
+                <label>Metering and Readings - Remote Reading Reliability Verification</label>
+            </value>
+            <value>
+                <fullName>Distribution - Pump Adjustment</fullName>
+                <default>false</default>
+                <label>Distribution - Pump Adjustment</label>
+            </value>
+            <value>
+                <fullName>Distribution - Valve Adjustment</fullName>
+                <default>false</default>
+                <label>Distribution - Valve Adjustment</label>
+            </value>
+            <value>
+                <fullName>Distribution - Rebalancing</fullName>
+                <default>false</default>
+                <label>Distribution - Rebalancing</label>
+            </value>
+            <value>
+                <fullName>Assistance and Expertise - PEM/MAP Intervention Request</fullName>
+                <default>false</default>
+                <label>Assistance and Expertise - PEM/MAP Intervention Request</label>
+            </value>
+            <value>
+                <fullName>Assistance and Expertise - SmartSystem</fullName>
+                <default>false</default>
+                <label>Assistance and Expertise - SmartSystem</label>
+            </value>
+            <value>
+                <fullName>Assistance and Expertise - Balancing to be Planned</fullName>
+                <default>false</default>
+                <label>Assistance and Expertise - Balancing to be Planned</label>
+            </value>
+            <value>
+                <fullName>Production - Cascade Adjustment</fullName>
+                <default>false</default>
+                <label>Production - Cascade Adjustment</label>
+            </value>
+            <value>
+                <fullName>Production - Combustion Adjustment</fullName>
+                <default>false</default>
+                <label>Production - Combustion Adjustment</label>
+            </value>
+            <value>
+                <fullName>Production - Chimney Sweeping</fullName>
+                <default>false</default>
+                <label>Production - Chimney Sweeping</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+    <visibleLines>4</visibleLines>
+</CustomField>

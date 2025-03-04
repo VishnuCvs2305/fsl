@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <help>Määritä, kuinka monta minuuttia palveluresurssilla on käytettävissä matkaan työpäivän päätyttyä. Tämä aika on resurssin kustannuksella, eikä sitä oteta huomioon. Jos tämä kenttä on tyhjä, kun käytetään Parannettua ajoitusta ja optimointia, kaikki matkat ajoitetaan työpäivän aikana. Kun Parannettua ajoitusta ja optimointia ei käytetä, jos tämä kenttä on tyhjä, mikä tahansa matka työpäivän jälkeen on voimassa.</help>
+    <label><!-- Travel To Home (minutes) --></label>
+    <name>FSL__Travel_To_Home__c</name>
+</CustomFieldTranslation>

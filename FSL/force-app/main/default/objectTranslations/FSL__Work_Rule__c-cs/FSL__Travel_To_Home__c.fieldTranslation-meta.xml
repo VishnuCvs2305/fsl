@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <help>Určete počet minut, které má servisní zdroj k dispozici pro cestu po skončení pracovního dne. Tento čas jde na vrub zdroje a nezapočítává se. Pokud je při použití funkce Rozšířené plánování a optimalizace toto pole prázdné, budou všechny cesty naplánovány v rámci pracovního dne. Pokud toto pole není prázdné a nepoužíváte funkci Rozšířené plánování a optimalizace, platí jakákoli doba cesty po skončení pracovního dne.</help>
+    <label><!-- Travel To Home (minutes) --></label>
+    <name>FSL__Travel_To_Home__c</name>
+</CustomFieldTranslation>

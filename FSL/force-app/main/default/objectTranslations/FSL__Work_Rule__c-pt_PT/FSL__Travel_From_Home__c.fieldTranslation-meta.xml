@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <help>Determine os minutos que o recurso de serviço tem para viajar antes do início do dia de trabalho. Este tempo é às custas do recurso e não é justificado. Quando utilizar Agendamento e otimização avançados, se este campo estiver vazio, todas as viagens serão agendadas no dia de trabalho. Quando não utilizar Agendamento e otimização avançados, se este campo estiver vazio, qualquer valor de viagem antes do início do dia de trabalho é válido.</help>
+    <label><!-- Travel From Home (minutes) --></label>
+    <name>FSL__Travel_From_Home__c</name>
+</CustomFieldTranslation>

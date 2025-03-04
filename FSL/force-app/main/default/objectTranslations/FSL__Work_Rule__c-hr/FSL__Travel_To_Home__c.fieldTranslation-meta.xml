@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <help>Odredite broj minuta koje ima na raspolaganju resurs usluge za putovanje nakon završetka radnog dana. To vrijeme ide na račun resursa i ne uračunava se. Kada se koriste napredno raspoređivanje i optimizacija, ako je ovo polje prazno, sve će se putovanje rasporediti unutar radnog dana. Kada se ne koriste napredno raspoređivanje i optimizacija, ako je ovo polje prazno, svako trajanje putovanja nakon završetka radnog dana je valjano.</help>
+    <label><!-- Travel To Home (minutes) --></label>
+    <name>FSL__Travel_To_Home__c</name>
+</CustomFieldTranslation>

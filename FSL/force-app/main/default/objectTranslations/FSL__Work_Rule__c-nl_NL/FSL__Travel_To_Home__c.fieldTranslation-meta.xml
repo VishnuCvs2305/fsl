@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <help>Bepaalt het aantal minuten dat de serviceresource beschikbaar heeft om te reizen nadat de werkdag is geëindigd. Deze tijd komt voor rekening van de resource en hoort niet bij de werkdag. Als u Uitgebreide planning en optimalisatie gebruikt en dit veld leeg is, worden alle reisminuten binnen de werkdag gepland. Als u Uitgebreide planning en optimalisatie niet gebruikt en dit veld leeg is, is elke hoeveelheid reizen na het eindigen van de werkdag geldig.</help>
+    <label><!-- Travel To Home (minutes) --></label>
+    <name>FSL__Travel_To_Home__c</name>
+</CustomFieldTranslation>

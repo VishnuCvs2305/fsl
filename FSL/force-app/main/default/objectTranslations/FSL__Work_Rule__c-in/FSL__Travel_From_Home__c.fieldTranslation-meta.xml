@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <help>Tentukan jumlah menit yang dimiliki oleh sumber daya layanan untuk perjalanan sebelum memulai hari kerja. Waktu ini merupakan tanggungan sumber daya tersebut dan tidak diperhitungkan. Ketika menggunakan Penjadwalan yang Disempurnakan dan Optimalisasi, jika bidang ini kosong, semua perjalanan akan dijadwalkan pada hari kerja. Jika tidak menggunakan Penjadwalan yang Disempurnakan dan Optimalisasi, jika bidang ini kosong, perjalanan sebelum memulai hari kerja dianggap valid.</help>
+    <label><!-- Travel From Home (minutes) --></label>
+    <name>FSL__Travel_From_Home__c</name>
+</CustomFieldTranslation>

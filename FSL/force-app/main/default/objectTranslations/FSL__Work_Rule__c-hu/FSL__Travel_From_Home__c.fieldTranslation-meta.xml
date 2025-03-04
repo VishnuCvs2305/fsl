@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <help>Adja meg, hány perce van a szolgáltatási erőforrásnak utazásra a munkanap megkezdése előtt. Ez az idő az erőforrás költsége, és nincsen figyelembe véve. Ha a Továbbfejlesztett ütemezés és optimalizálás használatakor ez a mező üres, minden utazás a munkanapon belülre lesz ütemezve. Ha nem használja a Továbbfejlesztett ütemezést és optimalizálást, és ez a mező üres, bármekkora utazási idő érvényes a munkanap kezdetekor.</help>
+    <label><!-- Travel From Home (minutes) --></label>
+    <name>FSL__Travel_From_Home__c</name>
+</CustomFieldTranslation>

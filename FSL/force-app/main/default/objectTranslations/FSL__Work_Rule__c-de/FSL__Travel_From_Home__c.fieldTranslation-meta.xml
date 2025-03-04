@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <help>Bestimmen Sie die für Arbeitswege verfügbare Zeit in Minuten für die Ressource vor Beginn des Arbeitstags. Diese geht auf Kosten der Ressource und wird nicht berücksichtigt. Bei Nutzung der erweiterten Planung und Optimierung werden alle Wege innerhalb des Arbeitstags geplant, wenn das Feld leer ist. Wenn Sie sie nicht nicht nutzen und das Feld leer ist, sind alle Wege vor Beginn des Arbeitstags gültig.</help>
+    <label><!-- Travel From Home (minutes) --></label>
+    <name>FSL__Travel_From_Home__c</name>
+</CustomFieldTranslation>

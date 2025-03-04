@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <help>Determinare quanti minuti ha la risorsa di servizio per il percorso prima che inizi la giornata lavorativa. Questo tempo è a spese della risorsa e non viene considerato. Se si usa la pianificaz. e ottimizz. avanzate e questo campo è vuoto, tutto il percorso verrà pianificato nella giornata lavorativa. Se non si usa la pianificaz. e ottimizz. avanzate e il campo è vuoto, qualsiasi quantità di percorso prima che inizi la giornata lavorativa è valida.</help>
+    <label><!-- Travel From Home (minutes) --></label>
+    <name>FSL__Travel_From_Home__c</name>
+</CustomFieldTranslation>

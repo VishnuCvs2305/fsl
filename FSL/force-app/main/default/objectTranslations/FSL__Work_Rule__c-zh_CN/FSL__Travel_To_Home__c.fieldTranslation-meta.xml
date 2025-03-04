@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <help>决定服务资源在工作日结束后可用于出差的分钟数。这段时间是资源的费用，不计算在内。使用增强计划和优化时，如果此字段为空，则所有出差都将安排在工作日内。不使用增强计划和优化时，如果此字段为空，则工作日结束后的任何出差数量有效。</help>
+    <label><!-- Travel To Home (minutes) --></label>
+    <name>FSL__Travel_To_Home__c</name>
+</CustomFieldTranslation>

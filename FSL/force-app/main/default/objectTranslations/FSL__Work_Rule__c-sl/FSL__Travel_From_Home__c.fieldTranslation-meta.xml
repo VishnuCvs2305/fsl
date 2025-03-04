@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <help>Opredeljuje število minut, ki jih ima storitveni vir na voljo za potovanje pred začetkom delovnega dne. Ta čas gre na račun vira in se ne obračunava. Pri uporabi izboljšanega razporejanja in optimizacije, če je to polje prazno, bodo vsa potovanja načrtovana znotraj delovnega dne. Če ne uporabljate izboljšanega razporejanja in optimizacije, če je to polje prazno, je veljaven kateri koli čas potovanja pred začetkom delovnega dne.</help>
+    <label><!-- Travel From Home (minutes) --></label>
+    <name>FSL__Travel_From_Home__c</name>
+</CustomFieldTranslation>

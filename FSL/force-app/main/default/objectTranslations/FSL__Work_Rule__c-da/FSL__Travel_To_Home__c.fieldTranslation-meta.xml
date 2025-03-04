@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <help>Fastsæt antallet af minutter, som serviceressourcen har til rådighed til rejse efter arbejdsdagens afslutning. Denne tid er for ressourcens regning og medregnes ikke. Når der bruges Forbedret planlægning og optimering og dette felt er tomt, vil al rejseaktivitet blive planlagt inden for arbejdsdagen. Når der ikke bruges Forbedret planlægning og optimering, og dette felt er tomt, er mængden af rejse efter afslutning af arbejdsdagen gyldig.</help>
+    <label><!-- Travel To Home (minutes) --></label>
+    <name>FSL__Travel_To_Home__c</name>
+</CustomFieldTranslation>
