@@ -145,23 +145,23 @@ export default class FSL_EnergyPropertyMeterReading_lwc extends LightningElement
     @wire(getRecord, { recordId: "$recordId", fields: SA_FIELDS })
     serviceAppointment({ error, data }) {
         if (data) {
-            console.debug('serviceAppointment getRecord data: ' + JSON.stringify(data));
+            console.log('serviceAppointment getRecord data: ' + JSON.stringify(data));
             //this.previousEnergyPropertyReadingId = data.fields.FSL_PreviousEnergyPropertyReading__c.value;
-            //console.debug('previousEnergyPropertyReadingId:' + this.previousEnergyPropertyReadingId);
-            console.debug('data.fields.FSL_TECH_ParentWorkOrder__r:' + JSON.stringify(data.fields.FSL_TECH_ParentWorkOrder__r));
-            console.debug('data.fields.FSL_TECH_ParentWorkOrder__r.value.fields.LocationId:' + JSON.stringify(data.fields.FSL_TECH_ParentWorkOrder__r.value.fields.LocationId));
+            //console.log('previousEnergyPropertyReadingId:' + this.previousEnergyPropertyReadingId);
+            console.log('data.fields.FSL_TECH_ParentWorkOrder__r:' + JSON.stringify(data.fields.FSL_TECH_ParentWorkOrder__r));
+            console.log('data.fields.FSL_TECH_ParentWorkOrder__r.value.fields.LocationId:' + JSON.stringify(data.fields.FSL_TECH_ParentWorkOrder__r.value.fields.LocationId));
             this.woId = data.fields.FSL_TECH_ParentWorkOrder__c.value;
-            console.debug('woId:' + this.woId);
+            console.log('woId:' + this.woId);
             this.woRecord = data.fields.FSL_TECH_ParentWorkOrder__r.value;
-            console.debug('woRecord:' + JSON.stringify(this.woRecord));
+            console.log('woRecord:' + JSON.stringify(this.woRecord));
             this.locationId = data.fields.FSL_TECH_ParentWorkOrder__r.value.fields.LocationId.value;
             this.currentLocationId = this.locationId;
-            console.debug('locationId:' + this.locationId);
+            console.log('locationId:' + this.locationId);
             this.locationRecord = data.fields.FSL_TECH_ParentWorkOrder__r.value.fields.Location.value;
-            console.debug('locationRecord:' + JSON.stringify(this.locationRecord));
+            console.log('locationRecord:' + JSON.stringify(this.locationRecord));
         }
         else if (error) {
-            console.debug('serviceAppointment getRecord error: ' + JSON.stringify(error));
+            console.log('serviceAppointment getRecord error: ' + JSON.stringify(error));
         }
     }
 
@@ -177,17 +177,17 @@ export default class FSL_EnergyPropertyMeterReading_lwc extends LightningElement
         sortBy: ['-FSL_EnergyPropertyReading__c.FSL_EnergyReadingDateTime__c'],
     })
     currentEPRListInfo({ error, data }) {
-        //console.debug('whereCondition: '+this.whereCondition);
-        console.debug('currentLocationId: '+this.currentLocationId);
+        //console.log('whereCondition: '+this.whereCondition);
+        console.log('currentLocationId: '+this.currentLocationId);
         if (data) {
-            console.debug('data.records.length: ' + data.records.length);
-            console.debug('Location current EPR getRelatedListRecords data: ' + JSON.stringify(data));
+            console.log('data.records.length: ' + data.records.length);
+            console.log('Location current EPR getRelatedListRecords data: ' + JSON.stringify(data));
             this.currentEPRRecords = data.records.filter(record => {
                 return record.fields.FSL_Intervention__r.value && record.fields.FSL_Intervention__r.value.fields.Id.value === this.woId;
             });
-            console.debug('currentEPRRecords: '+JSON.stringify(this.currentEPRRecords));
+            console.log('currentEPRRecords: '+JSON.stringify(this.currentEPRRecords));
             if (this.currentEPRRecords.length > 0) { // We have found an EPR related to the same WO. We use it as the current EPR.
-                console.debug('this.currentEPRRecords.length > 0');
+                console.log('this.currentEPRRecords.length > 0');
                 this.currentEPRRecord = {
                     Id: this.currentEPRRecords[0].fields.Id.value,
                     Name: this.currentEPRRecords[0].fields.Name.value,
@@ -201,32 +201,32 @@ export default class FSL_EnergyPropertyMeterReading_lwc extends LightningElement
                 };
                 this.currentEnergyPropertyReadingId = this.currentEPRRecord.Id;
                 if (data.records.length > 1) { // We see if we have a second record linked to the same Location. This would be the previous EPR for the location.
-                    console.debug('data.records.length > 1');
+                    console.log('data.records.length > 1');
                     this.previousEPRRecord = data.records[1];
                     this.previousEnergyPropertyReadingId = data.records[0].fields.Id.value;
-                    console.debug('previousEPRRecord: ' + JSON.stringify(this.previousEPRRecord));
+                    console.log('previousEPRRecord: ' + JSON.stringify(this.previousEPRRecord));
                 } else { // There is no previous EPR linked to the same Location.
-                    console.debug('data.records.length = 1');
+                    console.log('data.records.length = 1');
                     this.previousEPRRecord = null;
                 }
             }
             else { // No EPR linked to the same WO
-                console.debug('this.currentEPRRecords.length = 0');
+                console.log('this.currentEPRRecords.length = 0');
                 this.currentEPRRecord = null;
                 this.currentEnergyPropertyReadingId = null;
                 this.previousEPRRecord = data.records[0];
                 this.previousEnergyPropertyReadingId = data.records[0].fields.Id.value;
             }
-            console.debug('currentEPRRecord: ' + JSON.stringify(this.currentEPRRecord));
-            console.debug('currentEnergyPropertyReadingId: ' + this.currentEnergyPropertyReadingId);
-            console.debug('previousEPRRecord: ' + JSON.stringify(this.previousEPRRecord));
-            console.debug('previousEnergyPropertyReadingId: ' + this.previousEnergyPropertyReadingId);
+            console.log('currentEPRRecord: ' + JSON.stringify(this.currentEPRRecord));
+            console.log('currentEnergyPropertyReadingId: ' + this.currentEnergyPropertyReadingId);
+            console.log('previousEPRRecord: ' + JSON.stringify(this.previousEPRRecord));
+            console.log('previousEnergyPropertyReadingId: ' + this.previousEnergyPropertyReadingId);
             this.eprError = undefined;
         } else if (error) {
-            console.debug('Location current EPR getRelatedListRecords error: ' + JSON.stringify(error));
+            console.log('Location current EPR getRelatedListRecords error: ' + JSON.stringify(error));
             this.eprError = error;
             this.currentEPRRecords = undefined;
-            //console.debug('eprError: '+JSON.stringify(this.emrError));
+            //console.log('eprError: '+JSON.stringify(this.emrError));
         }
     }
 
@@ -239,23 +239,23 @@ export default class FSL_EnergyPropertyMeterReading_lwc extends LightningElement
 
 
     handleSave() {
-        console.debug('handleSave');
-        console.debug('handleSave - this.isEditing BEFORE: '+this.isEditing);
+        console.log('handleSave');
+        console.log('handleSave - this.isEditing BEFORE: '+this.isEditing);
         this.isEditing = false;
-        console.debug('handleSave - this.isEditing AFTER: '+this.isEditing);
+        console.log('handleSave - this.isEditing AFTER: '+this.isEditing);
         
     }
 
     
     handleSubmit(event) {
-        console.debug('handleSubmit');
-        console.debug('event.detail.fields: '+JSON.stringify(event.detail.fields));
+        console.log('handleSubmit');
+        console.log('event.detail.fields: '+JSON.stringify(event.detail.fields));
         event.preventDefault();       // stop the form from submitting
         this.isEditing = false;
         event.detail.fields.FSL_Intervention__c = this.woId;
         event.detail.fields.FSL_InstallationGeographicalZone__c = this.locationId;
         const fields = event.detail.fields;
-        console.debug('event.detail.fields AFTER: '+JSON.stringify(fields));
+        console.log('event.detail.fields AFTER: '+JSON.stringify(fields));
         console.log(JSON.stringify(fields));
         this.template.querySelector('lightning-record-edit-form').submit(fields);
      }
@@ -287,7 +287,7 @@ export default class FSL_EnergyPropertyMeterReading_lwc extends LightningElement
     }
 
     get energyReadingDateTimeFieldValue() {
-        console.debug('energyReadingDateTimeFieldValue: '+new Date().toISOString());
+        console.log('energyReadingDateTimeFieldValue: '+new Date().toISOString());
         return this.currentEPRRecord ? this.currentEPRRecord.fields.FSL_EnergyReadingDateTime__c.value : new Date().toISOString();
     }
 
@@ -302,16 +302,16 @@ export default class FSL_EnergyPropertyMeterReading_lwc extends LightningElement
         where: '{FSL_Readable__c: { eq: true }}'
     })
     assetListInfo({ error, data }) {
-        //console.debug('EPR_FIELDS: '+JSON.stringify(EPR_FIELDS));
-        console.debug('currentLocationId: '+this.currentLocationId);
+        //console.log('EPR_FIELDS: '+JSON.stringify(EPR_FIELDS));
+        console.log('assetListInfo currentLocationId: '+this.currentLocationId);
         if (data) {
-            //console.debug('Location Readable Assets getRelatedListRecords data: ' + JSON.stringify(data));
+            //console.log('Location Readable Assets getRelatedListRecords data: ' + JSON.stringify(data));
             this.assetRecords = data.records;
-            console.debug('assetRecords: '+JSON.stringify(this.assetRecords));
+            console.log('assetRecords: '+JSON.stringify(this.assetRecords));
             this.assetError = undefined;
             this.hasAssets = true;
         } else if (error) {
-            console.debug('Location ALL EPR getRelatedListRecords error: ' + JSON.stringify(error));
+            console.log('Location ALL EPR getRelatedListRecords error: ' + JSON.stringify(error));
             this.assetError = error;
             this.assetRecords = undefined;
             this.hasAssets = false;
@@ -319,7 +319,7 @@ export default class FSL_EnergyPropertyMeterReading_lwc extends LightningElement
     }
     
     @wire(getRelatedListRecords, {
-        parentRecordId: '$assetRecords',
+        parentRecordId: '$currentEnergyPropertyReadingId',
         relatedListId: 'FSL_EnergyMeterReading__r',
         fields: ['FSL_EnergyMeterReading__c.Id', 'FSL_EnergyMeterReading__c.FSL_Index__c', 
                  'FSL_EnergyMeterReading__c.FSL_Status__c', 'FSL_EnergyMeterReading__c.FSL_Comment__c', 
@@ -346,8 +346,8 @@ export default class FSL_EnergyPropertyMeterReading_lwc extends LightningElement
     }
 
     // Define fields for record forms
-    cptFields = ["FSL_Index__c", "FSL_Status__c", "FSL_Comment__c"];
-    sktFields = ["FSL_TankValue__c", "FSL_Delivery__c", "FSL_Status__c", "FSL_Comment__c"];
+    cptFields = ["Name", "FSL_Index__c", "FSL_Status__c", "FSL_Comment__c"];
+    sktFields = ["Name", "FSL_TankValue__c", "FSL_Delivery__c", "FSL_Status__c", "FSL_Comment__c"];
 
     handleSaisieIndex(event) {
         console.log('handleSaisieIndex');
@@ -378,7 +378,7 @@ export default class FSL_EnergyPropertyMeterReading_lwc extends LightningElement
     handleCPTModal(asset) {
         this.showCPTModal = true;
         console.log('handleCPTModal');
-        console.log('Assert' + asset);
+        console.log('Asset: ' + asset);
         
         if (this.assetMeterReadingsMap.has(asset) && this.assetMeterReadingsMap.get(asset).length > 0) {
             this.existingMeterReadingId = this.assetMeterReadingsMap.get(asset)[0].Id;
@@ -393,9 +393,10 @@ export default class FSL_EnergyPropertyMeterReading_lwc extends LightningElement
     handleSTKModal(asset) {
         this.showSTKModal = true;
         console.log('handleSTKModal');
-        console.log('Assert' + asset);
+        console.log('Asset: ' + asset);
         if (this.assetMeterReadingsMap.has(asset) && this.assetMeterReadingsMap.get(asset).length > 0) {
             this.existingMeterReadingId = this.assetMeterReadingsMap.get(asset)[0].Id;
+            console.log('existingMeterReadingId: ' + existingMeterReadingId);
         } else {
             this.existingStockReadingId = null;
             console.error('No meter readings found for the asset:', asset);
@@ -413,143 +414,28 @@ export default class FSL_EnergyPropertyMeterReading_lwc extends LightningElement
         this.existingStockReadingId = '';
     }
 
-    async saveMeterReading() {
-        try {
-            const assetId = this.selectedAsset.fields.Id.value;
-            const query = `/services/data/vXX.X/query/?q=SELECT Id, FSL_Index__c, FSL_Status__c, FSL_Comment__c FROM FSL_EnergyMeterReading__c WHERE FSL_Asset__c = '${assetId}' ORDER BY CreatedDate DESC LIMIT 1`;
+    handleSubmitEMR(event) {
+        console.log('handleSubmitEMR');
+        console.log('event.detail.fields: '+JSON.stringify(event.detail.fields));
+        event.preventDefault();       // stop the form from submitting
+        this.isEditing = false;
+        event.detail.fields.FSL_Asset__c = this.selectedAsset.fields.Id.value; //add all lookup fields
+        event.detail.fields.FSL_EnergyPropertyReading__c= this.currentEnergyPropertyReadingId;
+        event.detail.fields.FSL_ServiceAppointment__c= this.recordId;
+        // event.detail.fields.FSL_InstallationGeographicalZone__c = this.locationId;
+        const fields = event.detail.fields;
+        console.log('event.detail.fields AFTER: '+JSON.stringify(fields));
+        console.log('query: ' + JSON.stringify(this.template.querySelector('.EMR')));
+        this.template.querySelector('.EMR').submit(fields);
+     }
     
-            const response = await fetch(query, {
-                method: "GET",
-                headers: { "Authorization": "Bearer " + this.sessionId }
-            });
-    
-            const data = await response.json();
-    
-            if (data.records.length > 0) {
-                this.updateExistingMeterReading(data.records[0].Id);
-            } else {
-                this.createNewMeterReading();
-            }
-        } catch (error) {
-            console.error("Error checking existing meter reading:", error);
-            // Create new only if error is NOT related to fetch failure
-            if (error.message.includes("fetch")) {
-                alert("Failed to retrieve data. Please try again.");
-            } else {
-                this.createNewMeterReading();
-            }
-        }
-    }
-    
-    
-    async updateExistingMeterReading(recordId) {
-        try {
-            const fields = {
-                Id: recordId,
-                FSL_Index__c: this.editableIndex || 0, // Ensure valid input
-                FSL_Status__c: this.editableStatus || "Pending",
-                FSL_Comment__c: this.editableComment || ""
-            };
-    
-            await updateRecord({ fields });
-    
-            console.log("Meter reading updated successfully");
-            this.closeCPTModal();
-        } catch (error) {
-            console.error("Error updating meter reading:", error);
-        }
-    }
-    
-    // Create new meter reading
-    createNewMeterReading() {
-        const fields = {
-            FSL_Asset__c: this.selectedAsset.fields.Id.value,
-            FSL_Index__c: this.editableIndex,
-            FSL_Status__c: this.editableStatus,
-            FSL_Comment__c: this.editableComment
-        };
-    
-        const recordInput = { apiName: "FSL_EnergyMeterReading__c", fields };
-    
-        createRecord(recordInput)
-            .then(() => {
-                console.log("New meter reading created successfully");
-                this.closeCPTModal();
-            })
-            .catch(error => {
-                console.error("Error creating meter reading:", error);
-            });
-    }
 
-    async saveStockReading() {
-        try {
-            const assetId = this.selectedAsset.fields.Id.value;
-            const query = `/services/data/vXX.X/query/?q=SELECT Id, FSL_TankValue__c, FSL_Delivery__c, FSL_Status__c, FSL_Comment__c FROM FSL_EnergyMeterReading__c WHERE FSL_Asset__c = '${assetId}' ORDER BY CreatedDate DESC LIMIT 1`;
-    
-            const response = await fetch(query, {
-                method: "GET",
-                headers: { "Authorization": "Bearer " + this.sessionId }
-            });
-    
-            const data = await response.json();
-    
-            if (data.records.length > 0) {
-                this.updateExistingStockReading(data.records[0].Id);
-            } else {
-                this.createNewStockReading();
-            }
-        } catch (error) {
-            console.error("Error checking existing stock reading:", error);
-            if (error.message.includes("fetch")) {
-                alert("Failed to retrieve data. Please try again.");
-            } else {
-                this.createNewStockReading();
-            }
-        }
+     handleSuccessEMR(event) {
+        console.log('handleSuccessEMR');
+       //this.assetMeterReadingsMap.get(assetId).push();
+        console.log('event success: ' + JSON.stringify(event));
+        // this.currentEnergyPropertyReadingId = event.detail.id;
     }
-    
-    
-    async updateExistingStockReading(recordId) {
-        try {
-            const fields = {
-                Id: recordId,
-                FSL_TankValue__c: this.editableTankValue || 0,
-                FSL_Delivery__c: this.editableDelivery || 0,
-                FSL_Status__c: this.editableStatus || "Pending",
-                FSL_Comment__c: this.editableComment || ""
-            };
-    
-            await updateRecord({ fields });
-    
-            console.log("Stock reading updated successfully");
-            this.closeSTKModal();
-        } catch (error) {
-            console.error("Error updating stock reading:", error);
-        }
-    }
-    
-    // Create new stock reading
-    createNewStockReading() {
-        const fields = {
-            FSL_Asset__c: this.selectedAsset.fields.Id.value,
-            FSL_TankValue__c: this.editableTankValue,
-            FSL_Delivery__c: this.editableDelivery,
-            FSL_Status__c: this.editableStatus,
-            FSL_Comment__c: this.editableComment
-        };
-    
-        const recordInput = { apiName: "FSL_EnergyMeterReading__c", fields };
-    
-        createRecord(recordInput)
-            .then(() => {
-                console.log("New stock reading created successfully");
-                this.closeSTKModal();
-            })
-            .catch(error => {
-                console.error("Error creating stock reading:", error);
-            });
-    }
-    
 
     // Energy Meter Reading
     emrNameField = EMR_NAME_FIELD;
