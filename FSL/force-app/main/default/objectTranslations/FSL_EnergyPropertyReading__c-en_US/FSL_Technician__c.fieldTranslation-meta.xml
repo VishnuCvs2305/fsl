@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label><!-- Technician --></label>
+    <name>FSL_Technician__c</name>
+    <relationshipLabel><!-- Energy Property Readings --></relationshipLabel>
+</CustomFieldTranslation>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <help><!-- This TECH field is used to store the 18 char ID of the Service Appointment used to make the Energy Property Reading (EPR). It is unique to avoid having multiple instances of EPR for a given Service Appointment. --></help>
+    <label><!-- TECH Unique Service Appointment --></label>
+    <name>FSL_TECHUniqueServiceAppointment__c</name>
+</CustomFieldTranslation>

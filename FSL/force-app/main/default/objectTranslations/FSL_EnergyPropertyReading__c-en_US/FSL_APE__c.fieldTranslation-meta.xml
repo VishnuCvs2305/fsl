@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label><!-- APE --></label>
+    <name>FSL_APE__c</name>
+    <picklistValues>
+        <masterLabel>Assistance and Expertise - Balancing to be Planned</masterLabel>
+        <translation><!-- Assistance and Expertise - Balancing to be Planned --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Assistance and Expertise - PEM/MAP Intervention Request</masterLabel>
+        <translation><!-- Assistance and Expertise - PEM/MAP Intervention Request --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Assistance and Expertise - SmartSystem</masterLabel>
+        <translation><!-- Assistance and Expertise - SmartSystem --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>DHW - DHW Setpoint Adjustment</masterLabel>
+        <translation><!-- DHW - DHW Setpoint Adjustment --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>DHW - Heat Exchanger Cleaning</masterLabel>
+        <translation><!-- DHW - Heat Exchanger Cleaning --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>DHW - Solar Equipment Cleaning</masterLabel>
+        <translation><!-- DHW - Solar Equipment Cleaning --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Demand Regulation - Intermittency Adjustment</masterLabel>
+        <translation><!-- Demand Regulation - Intermittency Adjustment --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Demand Regulation - Optimization Adjustment</masterLabel>
+        <translation><!-- Demand Regulation - Optimization Adjustment --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Demand Regulation - Sensor Probe Verification</masterLabel>
+        <translation><!-- Demand Regulation - Sensor Probe Verification --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Demand Regulation - Water Law / TNC Adjustment</masterLabel>
+        <translation><!-- Demand Regulation - Water Law / TNC Adjustment --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Distribution - Pump Adjustment</masterLabel>
+        <translation><!-- Distribution - Pump Adjustment --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Distribution - Rebalancing</masterLabel>
+        <translation><!-- Distribution - Rebalancing --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Distribution - Valve Adjustment</masterLabel>
+        <translation><!-- Distribution - Valve Adjustment --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Metering and Readings - DHW Metering Verification</masterLabel>
+        <translation><!-- Metering and Readings - DHW Metering Verification --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Metering and Readings - Energy Metering Verification</masterLabel>
+        <translation><!-- Metering and Readings - Energy Metering Verification --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Metering and Readings - Fuel Metering Verification (Gas Pressure)</masterLabel>
+        <translation><!-- Metering and Readings - Fuel Metering Verification (Gas Pressure) --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Metering and Readings - Remote Reading Reliability Verification</masterLabel>
+        <translation><!-- Metering and Readings - Remote Reading Reliability Verification --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Production - Cascade Adjustment</masterLabel>
+        <translation><!-- Production - Cascade Adjustment --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Production - Chimney Sweeping</masterLabel>
+        <translation><!-- Production - Chimney Sweeping --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Production - Combustion Adjustment</masterLabel>
+        <translation><!-- Production - Combustion Adjustment --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Value1</masterLabel>
+        <translation><!-- Value1 --></translation>
+    </picklistValues>
+</CustomFieldTranslation>

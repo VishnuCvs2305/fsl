@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label><!-- Replaced by --></label>
+    <name>FSL_ReplacedBy__c</name>
+    <picklistValues>
+        <masterLabel>Client</masterLabel>
+        <translation><!-- Client --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Enedis</masterLabel>
+        <translation><!-- Enedis --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Engie Solution</masterLabel>
+        <translation><!-- Engie Solution --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>GRDF</masterLabel>
+        <translation><!-- GRDF --></translation>
+    </picklistValues>
+</CustomFieldTranslation>

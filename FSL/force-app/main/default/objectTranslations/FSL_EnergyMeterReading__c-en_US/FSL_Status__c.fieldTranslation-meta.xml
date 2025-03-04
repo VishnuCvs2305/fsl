@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label><!-- Status --></label>
+    <name>FSL_Status__c</name>
+    <picklistValues>
+        <masterLabel>Meter inaccessible</masterLabel>
+        <translation><!-- Meter inaccessible --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Meter out of order</masterLabel>
+        <translation><!-- Meter out of order --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Reading OK</masterLabel>
+        <translation><!-- Reading OK --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Temporary index entry</masterLabel>
+        <translation><!-- Temporary index entry --></translation>
+    </picklistValues>
+</CustomFieldTranslation>
