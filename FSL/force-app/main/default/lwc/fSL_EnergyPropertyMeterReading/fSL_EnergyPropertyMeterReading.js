@@ -203,7 +203,7 @@ export default class FSL_EnergyPropertyMeterReading_lwc extends LightningElement
                 if (data.records.length > 1) { // We see if we have a second record linked to the same Location. This would be the previous EPR for the location.
                     console.log('data.records.length > 1');
                     this.previousEPRRecord = data.records[1];
-                    this.previousEnergyPropertyReadingId = data.records[0].fields.Id.value;
+                    this.previousEnergyPropertyReadingId = data.records[0]?.fields?.Id?.value;
                     console.log('previousEPRRecord: ' + JSON.stringify(this.previousEPRRecord));
                 } else { // There is no previous EPR linked to the same Location.
                     console.log('data.records.length = 1');
@@ -212,10 +212,12 @@ export default class FSL_EnergyPropertyMeterReading_lwc extends LightningElement
             }
             else { // No EPR linked to the same WO
                 console.log('this.currentEPRRecords.length = 0');
+                if (data.records.length > 0) {
+                    this.previousEPRRecord = data.records[0];
+                    this.previousEnergyPropertyReadingId = data.records[0].fields.Id.value;
+                }
                 this.currentEPRRecord = null;
                 this.currentEnergyPropertyReadingId = null;
-                this.previousEPRRecord = data.records[0];
-                this.previousEnergyPropertyReadingId = data.records[0].fields.Id.value;
             }
             console.log('currentEPRRecord: ' + JSON.stringify(this.currentEPRRecord));
             console.log('currentEnergyPropertyReadingId: ' + this.currentEnergyPropertyReadingId);
@@ -226,7 +228,6 @@ export default class FSL_EnergyPropertyMeterReading_lwc extends LightningElement
             console.log('Location current EPR getRelatedListRecords error: ' + JSON.stringify(error));
             this.eprError = error;
             this.currentEPRRecords = undefined;
-            //console.log('eprError: '+JSON.stringify(this.emrError));
         }
     }
 
@@ -264,7 +265,9 @@ export default class FSL_EnergyPropertyMeterReading_lwc extends LightningElement
      handleSuccess(event) {
         console.log('handleSuccess');
         console.log(JSON.stringify(event));
+        console.log('currentEnergyPropertyReadingId: '+currentEnergyPropertyReadingId);
         this.currentEnergyPropertyReadingId = event.detail.id;
+        console.log('currentEnergyPropertyReadingId AFTER: +currentEnergyPropertyReadingId');
     }
     
 
@@ -318,9 +321,10 @@ export default class FSL_EnergyPropertyMeterReading_lwc extends LightningElement
         }
     }
     
+    // Retrieving Assets records related to the location related to the related WO
     @wire(getRelatedListRecords, {
         parentRecordId: '$currentEnergyPropertyReadingId',
-        relatedListId: 'FSL_EnergyMeterReading__r',
+        relatedListId: 'Energy_Meter_Readings__r',
         fields: ['FSL_EnergyMeterReading__c.Id', 'FSL_EnergyMeterReading__c.FSL_Index__c', 
                  'FSL_EnergyMeterReading__c.FSL_Status__c', 'FSL_EnergyMeterReading__c.FSL_Comment__c', 
                  'FSL_EnergyMeterReading__c.FSL_Asset__c'],
@@ -328,18 +332,23 @@ export default class FSL_EnergyPropertyMeterReading_lwc extends LightningElement
     })
     wiredMeterReadings({ error, data }) {
         if (data) {
-            this.assetMeterReadingsMap.clear();  // Reset map before updating
+            console.log("wiredMeterReadings data: ", JSON.stringify(data));
+            console.log("wiredMeterReadings data?.records: ", JSON.stringify(data?.records));
+            
+            // Reset map before updating
+            this.assetMeterReadingsMap = new Map();
     
             data.records.forEach(reading => {
                 const assetId = reading.fields.FSL_Asset__c.value;
-    
+                console.log("wiredMeterReadings assetId: ", assetId);
                 if (!this.assetMeterReadingsMap.has(assetId)) {
+                    console.log("wiredMeterReadings first time for: ", assetId);
                     this.assetMeterReadingsMap.set(assetId, []);
                 }
                 this.assetMeterReadingsMap.get(assetId).push(reading);
             });
     
-            console.log("Meter Readings Map: ", this.assetMeterReadingsMap);
+            console.log("Meter Readings Map: ", JSON.stringify([...this.assetMeterReadingsMap]));
         } else if (error) {
             console.error("Error fetching meter readings: ", error);
         }
@@ -380,8 +389,14 @@ export default class FSL_EnergyPropertyMeterReading_lwc extends LightningElement
         console.log('handleCPTModal');
         console.log('Asset: ' + asset);
         
-        if (this.assetMeterReadingsMap.has(asset) && this.assetMeterReadingsMap.get(asset).length > 0) {
-            this.existingMeterReadingId = this.assetMeterReadingsMap.get(asset)[0].Id;
+        console.log('this.assetMeterReadingsMap.has(asset):', this.assetMeterReadingsMap.has(asset));
+        console.log('this.assetMeterReadingsMap.has(asset).length:', this.assetMeterReadingsMap.has(asset).length);
+        console.log('this.existingMeterReadingId = this.assetMeterReadingsMap.get(asset)[0]:', JSON.stringify(this.existingMeterReadingId = this.assetMeterReadingsMap.get(asset)[0]));
+        if (this.assetMeterReadingsMap.has(asset)) {
+            console.log('Meter readings found for the asset:', asset);
+            
+            this.existingMeterReadingId = this.assetMeterReadingsMap.get(asset)[0]?.id;
+            console.log('existingMeterReadingId: ' + existingMeterReadingId);
         } else {
             this.existingMeterReadingId = null;
             console.error('No meter readings found for the asset:', asset);
@@ -434,7 +449,21 @@ export default class FSL_EnergyPropertyMeterReading_lwc extends LightningElement
         console.log('handleSuccessEMR');
        //this.assetMeterReadingsMap.get(assetId).push();
         console.log('event success: ' + JSON.stringify(event));
-        // this.currentEnergyPropertyReadingId = event.detail.id;
+        console.log('event event?.detail: ' + JSON.stringify(event?.detail));
+        console.log('event event.detail.id: ' + JSON.stringify(event?.detail?.id));
+        this.recalculateAssetEMRMap(this.selectedAsset.fields.Id.value, event.detail);
+        this.closeCPTModal();
+    }
+
+    recalculateAssetEMRMap(anAssetId, anEMR) {
+        console.log('recalculateAssetEMRMap - anEMR: ' + JSON.stringify(anEMR)+', anAssetId: ' + anAssetId);
+
+        if (!this.assetMeterReadingsMap.has(anAssetId)) {
+            console.log("First time for: ", anAssetId);
+            this.assetMeterReadingsMap.set(anAssetId, []);
+        }
+        this.assetMeterReadingsMap.get(anAssetId).push(anEMR);
+        console.log('assetMeterReadingsMap: ' + JSON.stringify(...this.assetMeterReadingsMap));
     }
 
     // Energy Meter Reading
