@@ -123,31 +123,13 @@
 
           <!-- If no meter reading, show in Edit mode -->
           <template if:false={existingMeterReadingId}>
-            <lightning-record-edit-form  class='EMR' object-api-name="FSL_EnergyMeterReading__c" onsubmit={handleSubmitEMR} onsuccess={handleSuccessEMR}>
+            <lightning-record-edit-form  class='CPT' object-api-name="FSL_EnergyMeterReading__c" onsubmit={handleSubmitEMR} onsuccess={handleSuccessEMR}>
               <lightning-input-field field-name="FSL_Index__c"></lightning-input-field>
               <lightning-input-field field-name="FSL_Status__c" value=""></lightning-input-field>
               <lightning-input-field field-name="FSL_Comment__c"></lightning-input-field>
               <lightning-button class="slds-m-left_x-small" variant="brand" type="submit" label="create"></lightning-button>
               <lightning-button class="slds-m-left_x-small" label="Annuler" onclick={closeCPTModal}></lightning-button>
             </lightning-record-edit-form>
-
-            <!-- <lightning-record-form class='EMR' object-api-name="FSL_EnergyMeterReading__c"
-              fields={cptFields} mode="edit" onsubmit={handleSubmitEMR} onsuccess={handleSuccessEMR}>
-            </lightning-record-form> -->
-            <!-- <lightning-record-edit-form object-api-name="FSL_EnergyMeterReading__c" onsubmit={handleSubmit} onsuccess={handleSuccess}> change it record form 
-
-              <lightning-messages></lightning-messages>
-
-              <lightning-input-field field-name="FSL_Index__c"></lightning-input-field>
-              <lightning-input-field field-name="FSL_Status__c"></lightning-input-field>
-              <lightning-input-field field-name="FSL_Comment__c"></lightning-input-field>
-
-              <div class="slds-m-top_medium">
-                <lightning-button label="Annuler" onclick={closeCPTModal}></lightning-button>
-                <lightning-button type="submit" label="Valider" variant="brand"></lightning-button>
-              </div>
-
-             </lightning-record-edit-form> -->
           </template>
         </div>
       </div>
@@ -170,33 +152,24 @@
             <lightning-record-form record-id={existingStockReadingId} object-api-name="FSL_EnergyMeterReading__c"
               fields={sktFields} mode="view">
             </lightning-record-form>
+            <lightning-button label="Fermer" onclick={closeSTKModal}></lightning-button>
           </template>
 
           <!-- If no stock reading, show in Edit mode -->
           <template if:false={existingStockReadingId}>
-            <lightning-record-edit-form object-api-name="FSL_EnergyMeterReading__c" onsubmit={handleSubmit}
-              onsuccess={handleSuccess}>
-
-              <lightning-messages></lightning-messages>
-
+            <lightning-record-edit-form class='STK' object-api-name="FSL_EnergyMeterReading__c" onsubmit={handleSubmitEMR} onsuccess={handleSuccessEMR}>
               <lightning-input-field field-name="FSL_TankValue__c"></lightning-input-field>
               <lightning-input-field field-name="FSL_Delivery__c"></lightning-input-field>
               <lightning-input-field field-name="FSL_Status__c"></lightning-input-field>
               <lightning-input-field field-name="FSL_Comment__c"></lightning-input-field>
 
-              <div class="slds-m-top_medium">
-                <lightning-button label="Annuler" onclick={closeSTKModal}></lightning-button>
-                <lightning-button type="submit" label="Valider" variant="brand"></lightning-button>
-              </div>
-
+              <lightning-button class="slds-m-left_x-small" variant="brand" type="submit" label="create"></lightning-button>
+              <lightning-button class="slds-m-left_x-small" label="Annuler" onclick={closeSTKModal}></lightning-button>
             </lightning-record-edit-form>
           </template>
         </div>
       </div>
     </section>
   </template>
-
-
-
 
 </template>

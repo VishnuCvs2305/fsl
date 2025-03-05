@@ -139,6 +139,7 @@ export default class FSL_EnergyPropertyMeterReading_lwc extends LightningElement
     @track existingMeterReadingId = null;
     @track existingStockReadingId = null;
     @track selectedAsset;
+    @track equipmentType;
 
 
 
@@ -372,51 +373,63 @@ export default class FSL_EnergyPropertyMeterReading_lwc extends LightningElement
         this.selectedAsset = selectedAsset;
     
         // Determine equipment type
-        const equipmentType = selectedAsset.fields.FSL_EnergyEquipementType__c?.value;
+        this.equipmentType = selectedAsset.fields.FSL_EnergyEquipementType__c?.value;
     
-        if (equipmentType === "CPT") {
-            this.handleCPTModal(selectedAssetId);
-        } else if (equipmentType === "STK") {
-            this.handleSTKModal(selectedAssetId);
+        if (this.equipmentType === "CPT" || this.equipmentType === "STK") {
+            this.handleModal(selectedAssetId,  this.equipmentType);
         } else {
-            console.warn("Unknown equipment type:", equipmentType);
+            console.warn("Unknown equipment type:", this.equipmentType);
         }
     }
     
     // Handle CPT (Meter Reading) Modal
-    handleCPTModal(asset) {
-        this.showCPTModal = true;
-        console.log('handleCPTModal');
+    handleModal(asset, equipmentType) {
+        console.log('handleModal');
         console.log('Asset: ' + asset);
         
         console.log('this.assetMeterReadingsMap.has(asset):', this.assetMeterReadingsMap.has(asset));
-        console.log('this.assetMeterReadingsMap.has(asset).length:', this.assetMeterReadingsMap.has(asset).length);
-        console.log('this.existingMeterReadingId = this.assetMeterReadingsMap.get(asset)[0]:', JSON.stringify(this.existingMeterReadingId = this.assetMeterReadingsMap.get(asset)[0]));
+       // console.log('this.assetMeterReadingsMap.has(asset).length:', this.assetMeterReadingsMap.has(asset).length);
+        //console.log('this.existingMeterReadingId = this.assetMeterReadingsMap.get(asset)[0]:', JSON.stringify(this.existingMeterReadingId = this.assetMeterReadingsMap.get(asset)[0]));
         if (this.assetMeterReadingsMap.has(asset)) {
             console.log('Meter readings found for the asset:', asset);
-            
-            this.existingMeterReadingId = this.assetMeterReadingsMap.get(asset)[0]?.id;
+            if(equipmentType === 'CPT') {
+                this.showCPTModal = true;
+                this.existingMeterReadingId = this.assetMeterReadingsMap.get(asset)[0]?.id;
+            }
+            else if(equipmentType === 'STK') {
+                this.showSTKModal = true;
+                this.existingStockReadingId = this.assetMeterReadingsMap.get(asset)[0]?.id;
+            }
             console.log('existingMeterReadingId: ' + existingMeterReadingId);
+            console.log('existingStockReadingId: ' + existingStockReadingId);
         } else {
-            this.existingMeterReadingId = null;
-            console.error('No meter readings found for the asset:', asset);
+            if(equipmentType === 'CPT') {
+                this.showCPTModal = true;
+                this.existingMeterReadingId = null;
+                console.error('No meter readings found for the CPT asset:', asset);
+            }
+            else if(equipmentType === 'STK') {
+                this.showSTKModal = true;
+                this.existingStockReadingId = null;
+                console.error('No meter readings found for the STK asset:', asset);
+            }
         } 
     
     }
     
     // Handle STK (Stock Reading) Modal
-    handleSTKModal(asset) {
-        this.showSTKModal = true;
-        console.log('handleSTKModal');
-        console.log('Asset: ' + asset);
-        if (this.assetMeterReadingsMap.has(asset) && this.assetMeterReadingsMap.get(asset).length > 0) {
-            this.existingMeterReadingId = this.assetMeterReadingsMap.get(asset)[0].Id;
-            console.log('existingMeterReadingId: ' + existingMeterReadingId);
-        } else {
-            this.existingStockReadingId = null;
-            console.error('No meter readings found for the asset:', asset);
-        }
-    }
+    // handleSTKModal(asset) {
+    //     this.showSTKModal = true;
+    //     console.log('handleSTKModal');
+    //     console.log('Asset: ' + asset);
+    //     if (this.assetMeterReadingsMap.has(asset) && this.assetMeterReadingsMap.get(asset).length > 0) {
+    //         this.existingMeterReadingId = this.assetMeterReadingsMap.get(asset)[0].Id;
+    //         console.log('existingMeterReadingId: ' + existingMeterReadingId);
+    //     } else {
+    //         this.existingStockReadingId = null;
+    //         console.error('No meter readings found for the asset:', asset);
+    //     }
+    // }
     closeCPTModal() {
         this.showCPTModal = false;
         this.selectedEquipmentType = '';
@@ -440,11 +453,16 @@ export default class FSL_EnergyPropertyMeterReading_lwc extends LightningElement
         // event.detail.fields.FSL_InstallationGeographicalZone__c = this.locationId;
         const fields = event.detail.fields;
         console.log('event.detail.fields AFTER: '+JSON.stringify(fields));
-        console.log('query: ' + JSON.stringify(this.template.querySelector('.EMR')));
-        this.template.querySelector('.EMR').submit(fields);
+        if(this.equipmentType === 'CPT') {
+        console.log('query: ' + JSON.stringify(this.template.querySelector('.CPT')));
+        this.template.querySelector('.CPT').submit(fields);
+        }else if(this.equipmentType === 'STK') {
+        console.log('query: ' + JSON.stringify(this.template.querySelector('.STK')));
+        this.template.querySelector('.STK').submit(fields);
+        }
+
      }
     
-
      handleSuccessEMR(event) {
         console.log('handleSuccessEMR');
        //this.assetMeterReadingsMap.get(assetId).push();
@@ -453,6 +471,7 @@ export default class FSL_EnergyPropertyMeterReading_lwc extends LightningElement
         console.log('event event.detail.id: ' + JSON.stringify(event?.detail?.id));
         this.recalculateAssetEMRMap(this.selectedAsset.fields.Id.value, event.detail);
         this.closeCPTModal();
+        this.closeSTKModal();
     }
 
     recalculateAssetEMRMap(anAssetId, anEMR) {
