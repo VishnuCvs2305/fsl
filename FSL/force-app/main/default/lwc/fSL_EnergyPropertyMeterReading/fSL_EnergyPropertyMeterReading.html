@@ -14,13 +14,13 @@
     </div-->
 
 
-  <template if:true={currentEnergyPropertyReadingId}>
+  <template if:true={currentEPRId}>
     <lightning-card title="Update Energy Property Reading">
-      <lightning-record-form object-api-name={eprObject} record-id={currentEnergyPropertyReadingId}
-        fields={currentEPREditFields}></lightning-record-form>
+      <lightning-record-form object-api-name={eprObject} record-id={currentEPRId}
+        fields={currentEPREditFields} onsubmit={handleSubmitExistingEPR} onsuccess={handleSuccessExistingEPR}></lightning-record-form>
     </lightning-card>
   </template>
-  <template if:false={currentEnergyPropertyReadingId}>
+  <template if:false={currentEPRId}>
     <lightning-card title="Create Energy Property Reading">
       <!--lightning-record-form object-api-name={eprObject} fields={currentEPRCreateFields} onsubmit={handleSubmit} onsuccess={handleSuccess}></lightning-record-form-->
 
@@ -36,9 +36,9 @@
 
     </lightning-card>
   </template>
-  <template if:true={previousEnergyPropertyReadingId}>
+  <template if:true={previousEPRId}>
     <lightning-card title="Previous Energy Property Reading">
-      <lightning-record-form object-api-name={eprObject} record-id={previousEnergyPropertyReadingId}
+      <lightning-record-form object-api-name={eprObject} record-id={previousEPRId}
         fields={previousEPRReadFields} mode="readonly"></lightning-record-form>
     </lightning-card>
   </template>
@@ -110,13 +110,14 @@
         </header>
         <div class="slds-modal__content slds-p-around_medium">
           <p><strong> Nom du Compteur:</strong> {selectedAsset.fields.Name.value}</p>
+          <p><strong> Dernier index:</strong> {previousEMRIndex}</p>
           <!-- <p><strong> Unité:</strong> {selectedAsset.fields.FSL_MeasureUnit__c.value}</p> -->
 
 
           <!-- If meter reading record exists, show in View mode -->
           <template if:true={existingMeterReadingId}>
-            <lightning-record-form record-id={existingMeterReadingId} object-api-name="FSL_EnergyMeterReading__c"
-              fields={cptFields} mode="view">
+            <lightning-record-form class='CPT' record-id={existingMeterReadingId} object-api-name="FSL_EnergyMeterReading__c"
+              fields={cptFields} mode="view" onsubmit={handleSubmitEMR}>
             </lightning-record-form>
             <lightning-button label="Fermer" onclick={closeCPTModal}></lightning-button>
           </template>
@@ -149,8 +150,8 @@
 
           <!-- If stock reading exists, show in View mode -->
           <template if:true={existingStockReadingId}>
-            <lightning-record-form record-id={existingStockReadingId} object-api-name="FSL_EnergyMeterReading__c"
-              fields={sktFields} mode="view">
+            <lightning-record-form class='STK' record-id={existingStockReadingId} object-api-name="FSL_EnergyMeterReading__c"
+              fields={sktFields} mode="view" onsubmit={handleSubmitEMR}>
             </lightning-record-form>
             <lightning-button label="Fermer" onclick={closeSTKModal}></lightning-button>
           </template>
