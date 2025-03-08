@@ -14,13 +14,13 @@
     </div-->
 
 
-  <template if:true={currentEnergyPropertyReadingId}>
+  <template if:true={currentEPRId}>
     <lightning-card title="Update Energy Property Reading">
-      <lightning-record-form object-api-name={eprObject} record-id={currentEnergyPropertyReadingId}
-        fields={currentEPREditFields}></lightning-record-form>
+      <lightning-record-form object-api-name={eprObject} record-id={currentEPRId}
+        fields={currentEPREditFields} onsubmit={handleSubmitExistingEPR} onsuccess={handleSuccessExistingEPR}></lightning-record-form>
     </lightning-card>
   </template>
-  <template if:false={currentEnergyPropertyReadingId}>
+  <template if:false={currentEPRId}>
     <lightning-card title="Create Energy Property Reading">
       <!--lightning-record-form object-api-name={eprObject} fields={currentEPRCreateFields} onsubmit={handleSubmit} onsuccess={handleSuccess}></lightning-record-form-->
 
@@ -36,9 +36,9 @@
 
     </lightning-card>
   </template>
-  <template if:true={previousEnergyPropertyReadingId}>
+  <template if:true={previousEPRId}>
     <lightning-card title="Previous Energy Property Reading">
-      <lightning-record-form object-api-name={eprObject} record-id={previousEnergyPropertyReadingId}
+      <lightning-record-form object-api-name={eprObject} record-id={previousEPRId}
         fields={previousEPRReadFields} mode="readonly"></lightning-record-form>
     </lightning-card>
   </template>
