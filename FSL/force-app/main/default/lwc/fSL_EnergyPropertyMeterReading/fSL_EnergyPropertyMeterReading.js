@@ -23,6 +23,7 @@ const EPR_FIELDS = [
     LOCATIONID_FIELD
 ];
 
+
 /*const CURRENT_EPR_CREATE_FIELDS = [
     NAME_FIELD,
     HEATINGPERIOD_FIELD,
@@ -176,9 +177,9 @@ export default class FSL_EnergyPropertyMeterReading_lwc extends LightningElement
         //fields: EPR_FIELDS,
         fields: ['FSL_EnergyPropertyReading__c.Id', 'FSL_EnergyPropertyReading__c.Name', 'FSL_EnergyPropertyReading__c.FSL_State__c', 'FSL_EnergyPropertyReading__c.FSL_HeatingPeriod__c', 'FSL_EnergyPropertyReading__c.FSL_EnergyReadingDateTime__c', 'FSL_EnergyPropertyReading__c.FSL_MeterComplete__c', 'FSL_EnergyPropertyReading__c.FSL_APE__c', 'FSL_EnergyPropertyReading__c.FSL_Intervention__r.Id'],
         sortBy: ['-FSL_EnergyPropertyReading__c.FSL_EnergyReadingDateTime__c'],
+        pageSize: 2,
     })
     currentEPRListInfo({ error, data }) {
-        //console.log('whereCondition: '+this.whereCondition);
         console.log('currentLocationId: '+this.currentLocationId);
         if (data) {
             console.log('data.records.length: ' + data.records.length);
@@ -204,7 +205,7 @@ export default class FSL_EnergyPropertyMeterReading_lwc extends LightningElement
                 if (data.records.length > 1) { // We see if we have a second record linked to the same Location. This would be the previous EPR for the location.
                     console.log('data.records.length > 1');
                     this.previousEPRRecord = data.records[1];
-                    this.previousEnergyPropertyReadingId = data.records[0]?.fields?.Id?.value;
+                    this.previousEnergyPropertyReadingId = this.previousEPRRecord?.fields?.Id?.value;
                     console.log('previousEPRRecord: ' + JSON.stringify(this.previousEPRRecord));
                 } else { // There is no previous EPR linked to the same Location.
                     console.log('data.records.length = 1');
