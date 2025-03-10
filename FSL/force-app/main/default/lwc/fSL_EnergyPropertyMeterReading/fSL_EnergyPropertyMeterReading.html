@@ -90,7 +90,8 @@
                   data-id={rec.fields.Id.value}>Saisie index</button>
               </td>
               <td data-label="Remplacement">
-                <button class="slds-button slds-button_text-destructive">Remplacement</button>
+                <button class="slds-button slds-button_text-destructive" onclick={handleRemplacement}
+                data-id={rec.fields.Id.value}>Remplacement</button>
               </td>
             </tr>
           </template>
@@ -172,5 +173,35 @@
       </div>
     </section>
   </template>
+
+  <!-- Remplacement Modal -->
+  <template if:true={showRemplacementModal}>
+    <section role="dialog" class="slds-modal slds-fade-in-open">
+      <div class="slds-modal__container">
+        <header class="slds-modal__header slds-theme_alert-texture slds-theme_shade">
+          <h2 class="slds-text-heading_medium">Saisie d’un stock</h2>
+        </header>
+        <div class="slds-modal__content slds-p-around_medium">
+          <p><strong> Nom du Compteur:</strong> {selectedAsset.fields.Name.value}</p>
+
+          <!-- If stock reading exists, show in View mode -->
+          <template if:true={existingRemplacementId}>
+            <lightning-record-form record-id={existingRemplacementId} object-api-name="FSL_EnergyMeterReading__c"
+              fields={ReplacmentFields} mode="view">
+            </lightning-record-form>
+            <lightning-button label="Fermer" onclick={closeRemplacementModal}></lightning-button>
+          </template>
+
+          <!-- If no stock reading, show in Edit mode -->
+          <template if:false={existingRemplacementId}>
+            <p> No meterReading found, Want to Create..?</p>
+            <lightning-button class="slds-m-left_x-small" variant="brand" label="create" onclick={handleRemplacementRedirect} ></lightning-button>
+            <lightning-button class="slds-m-left_x-small" label="Annuler" onclick={closeRemplacementModal}></lightning-button>
+          </template>
+        </div>
+      </div>
+    </section>
+  </template>
+
 
 </template>

@@ -777,6 +777,53 @@ export default class FSL_EnergyPropertyMeterReading_lwc extends LightningElement
         console.log('assetMeterReadingsMap: ' + JSON.stringify(...this.assetMeterReadingsMap));
     }
 
+
+    handleRemplacement(event) {
+        console.log('handleRemplacement');
+        console.log('Asset ID - ' + event.target.dataset.id);
+        this.showRemplacementModal = true;
+        const selectedAssetId = event.target.dataset.id; // Get Asset ID from clicked button
+        const selectedAsset = this.assetRecords.find(asset => asset.fields.Id.value === selectedAssetId);
+    
+        if (!selectedAsset) {
+            console.error("No asset found for the selected row.");
+            return;
+        }
+        
+        this.selectedAssetId = selectedAssetId;
+        this.selectedAsset = selectedAsset;
+        if (this.assetMeterReadingsMap.has(selectedAssetId)) {
+            console.log('Meter readings found for the asset:', selectedAssetId);
+                this.existingRemplacementId = this.assetMeterReadingsMap.get(selectedAssetId)[0]?.id;
+        } else {
+            this.existingRemplacementId = null;
+            // this.showRemplacementModal = false;
+            // this.handleSaisieIndex(event);
+            console.error('No meter readings found for the asset:', selectedAssetId);
+        }
+    }
+
+    handleRemplacementRedirect(event) {
+        console.log('handleRemplacementRedirect');
+        this.showRemplacementModal = false;
+        const selectedAsset = this.selectedAsset;
+
+        // Determine equipment type
+        this.equipmentType = selectedAsset.fields.FSL_EnergyEquipementType__c?.value;
+    
+        if (this.equipmentType === "CPT" || this.equipmentType === "STK") {
+            this.handleModal(selectedAsset.fields.Id.value,  this.equipmentType);
+        } else {
+            console.warn("Unknown equipment type:", this.equipmentType);
+        }
+
+    }
+
+    closeRemplacementModal() {
+        this.showRemplacementModal = false;
+        this.existingRemplacementId = '';
+    }
+
     // Energy Meter Reading
     emrNameField = EMR_NAME_FIELD;
     emrAssetField = EMR_ASSET_FIELD;
