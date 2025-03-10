@@ -6,7 +6,8 @@ const SA_FIELDS = [
     SA_NAME_FIELD,
     SA_WO_FIELD,
     SA_WO_LOCATION_FIELD,
-    SA_WO_LOCATIONID_FIELD
+    SA_WO_LOCATIONID_FIELD,
+    SA_CREATEDDATE
 ];
 
 const EPR_FIELDS = [
@@ -63,6 +64,7 @@ import SA_NAME_FIELD from '@salesforce/schema/ServiceAppointment.AppointmentNumb
 import SA_WO_FIELD from '@salesforce/schema/ServiceAppointment.FSL_TECH_ParentWorkOrder__c';
 import SA_WO_LOCATION_FIELD from '@salesforce/schema/ServiceAppointment.FSL_TECH_ParentWorkOrder__r.Location.Id';
 import SA_WO_LOCATIONID_FIELD from '@salesforce/schema/ServiceAppointment.FSL_TECH_ParentWorkOrder__r.LocationId';
+import SA_CREATEDDATE from '@salesforce/schema/ServiceAppointment.CreatedDate';
 
 // Energy Property Reading object
 import EPR_OBJECT from '@salesforce/schema/FSL_EnergyPropertyReading__c';
@@ -85,6 +87,11 @@ import LOCATIONID_FIELD from '@salesforce/schema/FSL_EnergyPropertyReading__c.FS
 // Energy Meter Reading fields
 import EMR_NAME_FIELD from '@salesforce/schema/FSL_EnergyMeterReading__c.Name';
 import EMR_ASSET_FIELD from '@salesforce/schema/FSL_EnergyMeterReading__c.FSL_Asset__c';
+
+import WORK_ORDER_LINE_ITEM_OBJECT from '@salesforce/schema/WorkOrderLineItem';
+import WOLIassert from "@salesforce/schema/WorkOrderLineItem.AssetId";
+import WOLIWOId from "@salesforce/schema/WorkOrderLineItem.WorkOrderId";
+import WOLIStatus from "@salesforce/schema/WorkOrderLineItem.Status";
 
 
 
@@ -138,8 +145,13 @@ export default class FSL_EnergyPropertyMeterReading_lwc extends LightningElement
     @track assetMeterReadingsMap = new Map();
     @track existingMeterReadingId = null;
     @track existingStockReadingId = null;
+    @track existingRemplacementId = null;
     @track selectedAsset;
     @track equipmentType;
+    @track previousEMRRecord = null;
+    @track showRemplacementModal = false;
+    @track selectedAssetId = '';
+    @track SACreatedDate= '';
 
 
 
@@ -160,6 +172,8 @@ export default class FSL_EnergyPropertyMeterReading_lwc extends LightningElement
             console.log('locationId:' + this.locationId);
             this.locationRecord = data.fields.FSL_TECH_ParentWorkOrder__r.value.fields.Location.value;
             console.log('locationRecord:' + JSON.stringify(this.locationRecord));
+            this.SACreatedDate = data.fields.CreatedDate.value;
+            console.log('SACreatedDate:' + this.SACreatedDate);
         }
         else if (error) {
             console.log('serviceAppointment getRecord error: ' + JSON.stringify(error));
@@ -301,7 +315,7 @@ export default class FSL_EnergyPropertyMeterReading_lwc extends LightningElement
         parentRecordId: '$currentLocationId',
         relatedListId: 'Assets',
         //fields: EPR_FIELDS,
-        fields: ['Asset.Id', 'Asset.LocationId', 'Asset.Location.Name', 'Asset.Name', 'Asset.FSL_P1__c', 'Asset.FSL_EnergyEquipementType__c'],
+        fields: ['Asset.Id', 'Asset.LocationId', 'Asset.Location.Name', 'Asset.Name', 'Asset.FSL_P1__c', 'Asset.FSL_EnergyEquipementType__c', 'Asset.FSL_MeasureUnit__c'],
         sortBy: ['Asset.Name'],
         where: '{FSL_Readable__c: { eq: true }}'
     })
@@ -355,9 +369,51 @@ export default class FSL_EnergyPropertyMeterReading_lwc extends LightningElement
         }
     }
 
+    // Retrieving previous records related to the Assert related to the related previous WO
+    @wire(getRelatedListRecords, {
+        parentRecordId: '$selectedAssetId',
+        relatedListId: 'Energy_Meter_Readings__r',
+        fields: ['FSL_EnergyMeterReading__c.Id', 'FSL_EnergyMeterReading__c.FSL_Index__c',
+                 'FSL_EnergyMeterReading__c.FSL_Status__c', 'FSL_EnergyMeterReading__c.FSL_Comment__c',
+                 'FSL_EnergyMeterReading__c.FSL_Asset__c', 'FSL_EnergyMeterReading__c.FSL_Previous_Energy_Meter_Reading__c', 
+                 'FSL_EnergyMeterReading__c.FSL_TankValue__c', 'FSL_EnergyMeterReading__c.FSL_Delivery__c', 'FSL_EnergyMeterReading__c.FSL_Status__c', 
+                 'FSL_EnergyMeterReading__c.FSL_Comment__c', 'FSL_EnergyMeterReading__c.CreatedDate', 'FSL_EnergyMeterReading__c.FSL_ServiceAppointment__c', 'FSL_EnergyMeterReading__c.FSL_ServiceAppointment__r.CreatedDate'],
+        sortBy: ['-CreatedDate'],
+    })
+    wiredPreviousMeterReadings({ error, data }) {
+        if (data) {
+            console.log("previousEMRRecord data: ", JSON.stringify(data));
+            console.log("previousEMRRecord data?.records: ", JSON.stringify(data?.records));
+            console.log("SACreatedDate: ", this.SACreatedDate);
+    
+            if (data?.records.length > 0) {
+                // Filter records where FSL_ServiceAppointment__c is NOT equal to recordId
+                let filteredRecords = data.records.filter(record => 
+                    record.fields.FSL_ServiceAppointment__c?.value !== this.recordId && 
+                    new Date(record.fields.FSL_ServiceAppointment__r?.value.fields.CreatedDate.value) < new Date(this.SACreatedDate)
+                );
+                console.log("filteredRecords: ", JSON.stringify(filteredRecords));
+                // Sort by CreatedDate DESC (latest first)
+                if (filteredRecords.length > 1) {
+                    filteredRecords.sort((a, b) => 
+                        new Date(b.fields.CreatedDate.value) - new Date(a.fields.CreatedDate.value)
+                    );
+                }
+    
+                this.previousEMRRecord = filteredRecords.length > 0 ? filteredRecords[0] : null;
+            }
+    
+            console.log("previousEMRRecord: ", JSON.stringify(this.previousEMRRecord));
+        } else if (error) {
+            console.error("Error fetching previousEMRRecord: ", error);
+        }
+    }
+    
+
     // Define fields for record forms
     cptFields = ["Name", "FSL_Index__c", "FSL_Status__c", "FSL_Comment__c"];
     sktFields = ["Name", "FSL_TankValue__c", "FSL_Delivery__c", "FSL_Status__c", "FSL_Comment__c"];
+    ReplacmentFields = ["Name", "FSL_StartDate__c", "FSL_Unit__c", "FSL_NumberOfDecimals__c", "FSL_MaximumValue__c", "FSL_NewMeterIndex__c", "FSL_Index__c", "FSL_ReplacedBy__c"];
 
     handleSaisieIndex(event) {
         console.log('handleSaisieIndex');
@@ -370,6 +426,7 @@ export default class FSL_EnergyPropertyMeterReading_lwc extends LightningElement
             return;
         }
     
+        this.selectedAssetId = selectedAssetId;
         this.selectedAsset = selectedAsset;
     
         // Determine equipment type
@@ -450,16 +507,43 @@ export default class FSL_EnergyPropertyMeterReading_lwc extends LightningElement
         event.detail.fields.FSL_Asset__c = this.selectedAsset.fields.Id.value; //add all lookup fields
         event.detail.fields.FSL_EnergyPropertyReading__c= this.currentEnergyPropertyReadingId;
         event.detail.fields.FSL_ServiceAppointment__c= this.recordId;
-        // event.detail.fields.FSL_InstallationGeographicalZone__c = this.locationId;
-        const fields = event.detail.fields;
-        console.log('event.detail.fields AFTER: '+JSON.stringify(fields));
-        if(this.equipmentType === 'CPT') {
-        console.log('query: ' + JSON.stringify(this.template.querySelector('.CPT')));
-        this.template.querySelector('.CPT').submit(fields);
-        }else if(this.equipmentType === 'STK') {
-        console.log('query: ' + JSON.stringify(this.template.querySelector('.STK')));
-        this.template.querySelector('.STK').submit(fields);
-        }
+        event.detail.fields.FSL_Previous_Energy_Meter_Reading__c = this.previousEMRRecord.fields.Id.value;
+
+        console.log('1');
+    // Create WorkOrderLineItem record
+    const workOrderLineItemFields = {};
+    //workOrderLineItemFields[WOLIassert.fieldApiName]= this.selectedAsset.fields.Id.value;
+    workOrderLineItemFields[WOLIWOId.fieldApiName]= this.woId;
+    workOrderLineItemFields[WOLIStatus.fieldApiName]= 'Completed';
+
+    console.log('2');
+    const recordInput = { apiName: WORK_ORDER_LINE_ITEM_OBJECT.objectApiName, workOrderLineItemFields };
+    console.log('3');
+    console.log('Creating Work Order Line Item with:', JSON.stringify(recordInput));
+    console.log('Record Input:', JSON.stringify(recordInput, null, 2));
+    console.log('Work Order Line Item Fields:', JSON.stringify(workOrderLineItemFields, null, 2));
+    console.log('Creating Work Order Line Item field:', JSON.stringify(recordInput.workOrderLineItemFields));
+    createRecord(recordInput)
+        .then((workOrderLineItem) => {
+            console.log('Work Order Line Item created:', workOrderLineItem.id);
+            event.detail.fields.FSL_WorkOrderLineItem__c = workOrderLineItem.id; // Set the newly created ID
+        })
+        .catch((error) => {
+            console.error('Error creating Work Order Line Item:', error);
+            console.error('Error details:', JSON.stringify(error));
+            event.detail.fields.FSL_WorkOrderLineItem__c = null; // Ensure field is not blocked
+        })
+        .finally(() => {
+            const fields = event.detail.fields;
+            console.log('Submitting form with fields:', JSON.stringify(fields));
+            if (this.equipmentType === 'CPT') {
+                console.log('Submitting CPT form...');
+                this.template.querySelector('.CPT').submit(fields);
+            } else if (this.equipmentType === 'STK') {
+                console.log('Submitting STK form...');
+                this.template.querySelector('.STK').submit(fields);
+            }
+        });
 
      }
     
@@ -485,6 +569,66 @@ export default class FSL_EnergyPropertyMeterReading_lwc extends LightningElement
         console.log('assetMeterReadingsMap: ' + JSON.stringify(...this.assetMeterReadingsMap));
     }
 
+    get assetMeasureUnit(){
+        console.log('AssetMeasureUnit: ' + this.selectedAsset?.fields.FSL_MeasureUnit__c?.value);
+        return this.selectedAsset ? this.selectedAsset?.fields.FSL_MeasureUnit__c?.value : '';
+    }
+
+    get dernierIndex(){
+        console.log('DernierIndex: ' + this.previousEMRRecord?.fields.FSL_Index__c?.value);
+        return this.previousEMRRecord ? this.previousEMRRecord.fields.FSL_Index__c?.value : '';
+    }
+
+    get dernierTankValue(){
+        console.log('dernierTankValue: ' + this.previousEMRRecord?.fields.FSL_TankValue__c?.value);
+        return this.previousEMRRecord ? this.previousEMRRecord.fields.FSL_TankValue__c?.value : '';
+    }
+
+    handleRemplacement(event) {
+        console.log('handleRemplacement');
+        console.log('Asset ID - ' + event.target.dataset.id);
+        this.showRemplacementModal = true;
+        const selectedAssetId = event.target.dataset.id; // Get Asset ID from clicked button
+        const selectedAsset = this.assetRecords.find(asset => asset.fields.Id.value === selectedAssetId);
+    
+        if (!selectedAsset) {
+            console.error("No asset found for the selected row.");
+            return;
+        }
+        
+        this.selectedAssetId = selectedAssetId;
+        this.selectedAsset = selectedAsset;
+        if (this.assetMeterReadingsMap.has(selectedAssetId)) {
+            console.log('Meter readings found for the asset:', selectedAssetId);
+                this.existingRemplacementId = this.assetMeterReadingsMap.get(selectedAssetId)[0]?.id;
+        } else {
+            this.existingRemplacementId = null;
+            // this.showRemplacementModal = false;
+            // this.handleSaisieIndex(event);
+            console.error('No meter readings found for the asset:', selectedAssetId);
+        }
+    }
+
+    handleRemplacementRedirect(event) {
+        console.log('handleRemplacementRedirect');
+        this.showRemplacementModal = false;
+        const selectedAsset = this.selectedAsset;
+
+        // Determine equipment type
+        this.equipmentType = selectedAsset.fields.FSL_EnergyEquipementType__c?.value;
+    
+        if (this.equipmentType === "CPT" || this.equipmentType === "STK") {
+            this.handleModal(selectedAsset.fields.Id.value,  this.equipmentType);
+        } else {
+            console.warn("Unknown equipment type:", this.equipmentType);
+        }
+
+    }
+
+    closeRemplacementModal() {
+        this.showRemplacementModal = false;
+        this.existingRemplacementId = '';
+    }
     // Energy Meter Reading
     emrNameField = EMR_NAME_FIELD;
     emrAssetField = EMR_ASSET_FIELD;
